@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#ece9df">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Вброс">
+<title>ВБРОС 0.4 — сенсорное демо</title>
+<style>
+:root{--paper:#f2f0e7;--paper2:#e9e6db;--ink:#202927;--muted:#69726d;--border:#d0d0c2;--red:#c9564e;--blue:#3b7b9c;--green:#5b987d;--gold:#c9a04e;--card:#faf9f3;--shadow:0 4px 20px rgba(42,50,42,.07)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;touch-action:pan-y}button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:disabled{opacity:.4;cursor:not-allowed}button:focus-visible,.cell:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.shell{max-width:1120px;margin:0 auto;padding:24px 24px 35px}.topline{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:13px;border-bottom:2px solid var(--ink)}.brand{font-weight:950;letter-spacing:-.075em;font-size:clamp(30px,5vw,44px);line-height:.9}.subbrand{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);margin-top:7px}.issue{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;white-space:nowrap}.issue b{display:inline-flex;border:1px solid var(--ink);padding:7px 11px;margin-left:7px;background:var(--card)}
+.intro{display:flex;align-items:center;justify-content:space-between;margin:16px 0;gap:16px}.intro h1{font-size:clamp(19px,3vw,27px);letter-spacing:-.04em;margin:0 0 4px}.intro p{font-size:12px;color:var(--muted);margin:0}.mode-tabs{display:flex;align-items:center;background:#e1dfd4;border:1px solid var(--border);padding:3px;gap:3px}.mode-tabs button{border:0;padding:9px 12px;color:var(--muted);background:transparent;font-size:12px;font-weight:800}.mode-tabs button.active{background:var(--ink);color:#fff}
+.stage-tabs{display:flex;gap:8px;margin-bottom:16px;overflow:auto;scrollbar-width:none;padding:0 0 3px}.stage-tabs::-webkit-scrollbar{display:none}.stage{padding:11px 13px;border:1px solid var(--border);background:var(--card);text-align:left;min-width:159px;flex-shrink:0;position:relative}.stage.active{background:var(--ink);border-color:var(--ink);color:#fff}.stage .name{font-weight:850;font-size:14px}.stage .meta{font-size:10px;letter-spacing:.04em;opacity:.65;margin-top:4px}.stage .count{font-size:10px;opacity:.8;float:right}
+.main{display:grid;grid-template-columns:minmax(0,650px) minmax(250px,1fr);gap:17px;align-items:start}.playcard,.sidebox{border:1px solid var(--border);background:var(--card);box-shadow:var(--shadow)}.playcard{padding:17px}.game-hud{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:13px;border-bottom:1px solid var(--border)}.game-hud .district{font-weight:850;font-size:16px}.muted{font-size:11px;color:var(--muted)}.hud-numbers{display:flex;gap:14px}.stat{text-align:right}.stat strong{display:block;font-size:22px;line-height:1;font-weight:900;letter-spacing:-.06em}.stat small{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}.danger strong{color:var(--red)}
+.rumor{background:#eee7dc;display:flex;align-items:center;gap:9px;padding:10px 12px;margin-top:12px;border-left:4px solid var(--red);font-size:12px;font-weight:650;line-height:1.4}.rumor span:first-child{font-size:17px}.rumor q{quotes:'«' '»'}
+.board-zone{position:relative;display:flex;justify-content:center;align-items:center;min-height:310px;padding:17px 4px 14px;overflow:hidden}.board-back{position:absolute;inset:0;opacity:.5;pointer-events:none;background:linear-gradient(165deg,transparent 64%,rgba(62,113,132,.06) 64%,rgba(62,113,132,.06) 74%,transparent 74%)}.board{--cols:8;--cell:35px;display:grid;grid-template-columns:repeat(var(--cols),var(--cell));grid-auto-rows:var(--cell);gap:3px;position:relative;isolation:isolate;touch-action:manipulation}.cell{width:var(--cell);height:var(--cell);display:grid;place-items:center;border:1px solid rgba(63,74,64,.12);border-radius:5px;position:relative;background:#e6e5db;color:#343d38;padding:0;outline:0;transition:background .22s ease,transform .15s ease,opacity .15s ease}.cell.inactive{border:0;background:transparent;pointer-events:none}.cell.free{background:#e7e7dd;cursor:pointer}.cell.free:hover{background:#dbdfd6}.cell.occupied{cursor:default}.cell.red{background:var(--red);border-color:#ac4e48;color:#fff}.cell.F{background:var(--blue);border-color:#2e647d;color:#fff}.cell.G{background:var(--green);border-color:#477761;color:#fff}.cell.M{background:var(--gold);border-color:#a68136;color:#fff}.cell.hint{box-shadow:inset 0 0 0 3px var(--ink)}.cell.hint-secondary{box-shadow:inset 0 0 0 2px #647e71}.cell.preview{box-shadow:inset 0 0 0 3px #353e3b}.cell.bad-preview{background:#edd1cb}.cell.convert{animation:turnSafe .4s both}.cell.newpiece{animation:popIn .25s both}.cell .human{display:block;position:relative;width:19px;height:19px}.human::before{content:'';position:absolute;width:7px;height:7px;border-radius:100%;left:6px;top:0;background:currentColor}.human::after{content:'';position:absolute;width:15px;height:8px;border-radius:7px 7px 3px 3px;left:2px;top:10px;background:currentColor}.cell.red .human{color:#fff}.cell.F .glyph,.cell.G .glyph,.cell.M .glyph{font-weight:900;font-size:18px;line-height:1}.cell .source-mark{position:absolute;right:2px;top:0;font-size:11px;font-weight:900;line-height:1}.cell.red .source-mark{color:#fff9}
+@keyframes turnSafe{0%{transform:scale(1);background:var(--red)}50%{transform:scale(1.23);background:#d8cf9c}100%{transform:scale(1);background:var(--green)}}@keyframes popIn{from{transform:scale(.35);opacity:.3}to{transform:scale(1);opacity:1}}
+.fx{position:absolute;top:36%;left:50%;transform:translateX(-50%) rotate(-5deg);background:var(--ink);color:white;font-size:clamp(17px,4.5vw,26px);font-weight:950;letter-spacing:-.04em;padding:10px 16px;z-index:30;white-space:nowrap;pointer-events:none;animation:fx .8s ease both}.fx:empty{display:none}@keyframes fx{0%{opacity:0;transform:translate(-50%,15px) rotate(-8deg) scale(.8)}20%,60%{opacity:1;transform:translate(-50%,0) rotate(-5deg) scale(1.05)}100%{opacity:0;transform:translate(-50%,-14px) rotate(-3deg) scale(1)}}
+.turnline{display:flex;justify-content:space-between;gap:7px;align-items:center;border-top:1px solid var(--border);padding:11px 0;color:var(--muted);font-size:11px;min-height:37px}.turnline strong{color:var(--ink)}
+.controller{border-top:2px solid var(--ink);display:grid;grid-template-columns:1.2fr .9fr;gap:15px;padding-top:12px}.label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}.deck{display:flex;align-items:center;gap:9px}.unit-pair{display:inline-flex;gap:3px;padding:5px;border:1px solid var(--border);background:var(--paper);min-height:51px;align-items:center}.unit{height:38px;width:38px;display:grid;place-items:center;font-size:21px;font-weight:900;color:#fff;border-radius:5px}.unit.F{background:var(--blue)}.unit.G{background:var(--green)}.unit.M{background:var(--gold)}.unit.R{background:var(--red)}.mini-pair{display:flex;gap:3px;align-items:center}.mini-pair .unit{width:21px;height:21px;font-size:12px}.unit-pair{cursor:pointer;border:2px solid #617568;position:relative;min-width:84px;width:84px;height:79px;justify-content:center;touch-action:manipulation}.unit-pair .unit{width:33px;height:33px}.unit-pair:active{transform:scale(.97)}.nextdeck{display:flex;gap:9px;align-items:center}.nextslot{display:flex;flex-direction:column;gap:3px;align-items:center}.nextslot small{font-size:10px;color:var(--muted);font-weight:750}.tray-tip{font-size:10px;color:var(--muted);margin-top:5px}.buttons{display:flex;flex-wrap:wrap;gap:7px;align-content:start;justify-content:flex-end}.btn{border:1px solid var(--ink);padding:10px 12px;background:var(--card);color:var(--ink);font-size:12px;font-weight:800;line-height:1.1;min-height:40px}.btn.primary{background:var(--ink);color:#fff}.btn:hover{filter:brightness(.96)}.btn.alt{border-color:var(--border)}.callout{margin-top:13px;background:#e6eee8;padding:11px 13px;display:flex;gap:9px;align-items:center;color:#285b49;font-size:12px;font-weight:700;min-height:42px}.callout.err{background:#f5e7df;color:#9c4a40}
+.sidebox{padding:17px;margin-bottom:13px}.sidebox h2{font-size:17px;margin:0 0 11px;letter-spacing:-.035em}.sidebox p{font-size:12px;line-height:1.6;margin:0 0 10px;color:var(--muted)}.sidebox p:last-child{margin-bottom:0}.rule{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}.rule:last-of-type{border:0}.rule .symbol{width:33px;height:33px;display:grid;place-items:center;color:white;background:var(--blue);font-weight:900;font-size:18px;flex-shrink:0}.rule .symbol.green{background:var(--green)}.rule .symbol.gold{background:var(--gold)}.rule .symbol.red{background:var(--red)}.how{margin-top:8px;padding:12px;background:var(--paper2);font-size:11px;line-height:1.55;color:#46514b}.how b{color:var(--ink)}.citymap{border:1px solid var(--border);background:#e6e5db;overflow:hidden}.citymap svg{width:100%;height:auto;display:block}.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.legend small{font-size:10px;display:flex;gap:4px;align-items:center;color:var(--muted)}.dot{width:9px;height:9px;display:inline-block;border-radius:2px}.status{font-size:11px;line-height:1.5;border-left:3px solid var(--blue);padding-left:10px;color:var(--muted)}.status strong{color:var(--ink)}
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(23,31,28,.72);display:none;align-items:center;justify-content:center;padding:20px}.overlay.show{display:flex}.modal{background:var(--card);border:3px solid var(--ink);width:min(430px,100%);padding:25px;box-shadow:12px 12px 0 rgba(0,0,0,.2)}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:900;color:var(--red)}.modal h2{font-size:clamp(26px,5vw,39px);margin:8px 0;letter-spacing:-.065em;line-height:1.05}.modal p{font-size:14px;line-height:1.5;color:var(--muted)}.modalactions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.ftr{margin-top:17px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:12px}.helpbtn{border:1px solid var(--border);border-radius:100%;width:27px;height:27px;font-size:13px;font-weight:900;background:transparent}
+@media(max-width:820px){.shell{padding:12px 12px 22px}.main{grid-template-columns:1fr;gap:12px}.intro{margin:12px 0}.sidebox{padding:14px}.sidecol{display:grid;grid-template-columns:1fr 1fr;gap:12px}.playcard{padding:12px}.board-zone{min-height:auto}.ftr{flex-wrap:wrap}.brand{font-size:32px}.subbrand{font-size:9px}}
+@media(max-width:560px){.topline{padding-bottom:10px}.issue{font-size:9px}.issue b{margin-left:2px;padding:6px}.intro{display:block}.intro h1{font-size:20px}.mode-tabs{margin-top:10px;display:grid;grid-template-columns:1fr 1fr}.mode-tabs button{padding:8px 6px}.stage-tabs{margin-bottom:10px}.stage{min-width:143px;padding:9px 11px}.playcard{padding:10px}.rumor{margin-top:9px;padding:8px 9px}.game-hud{padding-bottom:9px}.game-hud .district{font-size:14px}.hud-numbers{gap:10px}.stat strong{font-size:20px}.board-zone{padding:10px 0}.controller{grid-template-columns:1fr;gap:10px}.controller .buttons{justify-content:flex-start}.deck{gap:12px}.turnline{font-size:10px}.sidecol{display:block}.sidebox{margin-bottom:10px}.ftr{font-size:10px}.btn{min-height:41px}.intro p{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Version 0.4 — responsive touch-first interaction and explicit consequence highlights */
+.mobile-rules{display:none;margin-top:8px;border:1px solid var(--border);background:#efeee7;padding:9px 10px;font-size:12px;line-height:1.55}
+.mobile-rules summary{font-weight:800;cursor:pointer}.mobile-rules p{margin:7px 0}
+.touch-tag{font-size:11px;font-weight:800;border:1px solid var(--border);padding:8px 11px;white-space:nowrap;color:#467562;background:#e9eee8}.touch-tag span{font-weight:500;color:#5d6d64}
+#currentPair{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;min-width:92px;border:2px solid #243731;background:#e3ebdf;border-radius:8px}
+#currentPair:active{cursor:grabbing}
+#board{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.drag-ghost{display:none;position:fixed;z-index:200;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 7px 7px rgba(0,0,0,.24));opacity:.96}
+.drag-ghost.bad{opacity:.55;filter:grayscale(.35)}
+.drag-ghost .unit{font-size:22px;border:2px solid white;border-radius:6px}
+.cell.preview{box-shadow:inset 0 0 0 3px #243b34,0 0 0 2px #f4f1e7;z-index:6}
+.cell.will-convert{box-shadow:0 0 0 3px #ffd072,inset 0 0 0 3px #fff8e9;z-index:5}
+.cell.will-consume:not(.will-convert),.cell.being-used{outline:2px dashed #344c42;outline-offset:-4px}
+.preview-notice{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);z-index:8;background:#232f2a;color:white;font-size:11px;font-weight:800;white-space:nowrap;padding:5px 9px;pointer-events:none;max-width:96%;overflow:hidden;text-overflow:ellipsis}
+.preview-notice:empty{display:none}
+@media(max-width:560px){
+ .shell{padding:8px 8px calc(20px + env(safe-area-inset-bottom))}
+ .topline{padding-bottom:5px}.brand{font-size:25px}.subbrand{font-size:8px;margin-top:3px}.issue{font-size:8px}
+ .intro{margin:7px 0 5px}.intro h1{font-size:14px;margin:0}.intro p{display:none}
+ .touch-tag{display:none}.stage-tabs{margin:6px 0 8px}.stage{min-width:117px;padding:7px 10px}.stage .name{font-size:12px}.stage .meta{font-size:9px}
+ .game-hud .district{font-size:14px}.hud-numbers{gap:10px}.stat strong{font-size:18px}
+ .playcard{padding:8px}.rumor{margin-top:6px;padding:6px 8px;font-size:11px}
+ .board-zone{padding:6px 0 5px}.board{gap:2px}.cell{border-radius:4px}
+ .turnline{font-size:10px;padding:4px 0;min-height:24px}
+ .controller{position:sticky;bottom:0;background:var(--card);border-top:2px solid var(--ink);z-index:20;grid-template-columns:1fr;gap:5px;padding:8px 0 calc(6px + env(safe-area-inset-bottom))}
+ .controller .buttons{gap:5px;justify-content:space-between;flex-wrap:nowrap}
+ .controller .buttons .btn{padding:9px 6px;font-size:10px;min-height:38px;flex:1}
+ .deck{gap:7px}.unit-pair{width:88px;height:59px;min-height:59px}.unit-pair .unit{width:30px;height:30px}
+ .label{margin-bottom:3px;font-size:9px}.tray-tip{font-size:10px;line-height:1.25;margin-top:4px}
+ .callout{margin-top:5px;padding:7px 9px;min-height:32px;font-size:11px}
+ .sidecol{display:none}.mobile-rules{display:block}.ftr{font-size:9px;margin-top:7px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topline"><div><div class="brand">ВБРОС<span style="color:var(--red)">.</span></div><div class="subbrand">Опытный игровой образец / Civic Print</div></div><div class="issue">СТАМБУЛ <b>ДЕМО 0.4</b></div></header>
+  <section class="intro"><div><h1>Останови вброс. Переубеди всех.</h1><p>Город → район → головоломка. Случайные юниты и цепные реакции.</p></div><div class="touch-tag">● ИГРАЙ ПАЛЬЦЕМ <span>· свайп и отпускание</span></div></section>
+  <nav class="stage-tabs" id="stages" aria-label="Выбор района"></nav>
+  <main class="main">
+    <section class="playcard" aria-label="Игровое поле">
+      <div class="game-hud"><div><div class="district" id="levelName">Кадыкёй</div><div class="muted" id="levelDetail">Вымышленный вброс</div></div><div class="hud-numbers"><div class="stat danger"><strong id="reds">0</strong><small>Красных</small></div><div class="stat"><strong id="moves">0</strong><small>Ходов</small></div><div class="stat"><strong id="score">0</strong><small>Очков</small></div></div></div>
+      <div class="rumor"><span>❝</span><q id="rumorText">Закрывают городской мост</q></div>
+      <div class="board-zone" id="boardZone"><div class="board-back"></div><div class="board" id="board" role="grid" aria-label="Сеть людей и источников"></div><div class="preview-notice" id="previewNotice" aria-live="polite"></div><div id="fx" class="fx" aria-live="polite"></div></div>
+      <div class="turnline"><span id="directions">Захвати фишку снизу и перетащи на поле</span><strong id="statusLite">Готов к ходу</strong></div>
+      <div class="controller"><div><div class="label">Перетащи текущую фишку на поле</div><div class="deck"><button type="button" id="currentPair" class="unit-pair" aria-label="Зажми и перенеси на поле. Короткое касание поворачивает пару"></button><div style="font-weight:850;color:var(--muted)">›</div><div class="nextdeck"><div class="nextslot"><div id="nextPair" class="mini-pair" aria-label="Следующая фишка"></div><small>Следом</small></div><div class="nextslot"><div id="thirdPair" class="mini-pair" aria-label="Фишка через один ход"></div><small>Потом</small></div></div></div><div class="tray-tip">Проведи пальцем от фишки к клеткам и отпусти. Короткий тап по фишке — повернуть. Во время переноса второй палец тоже поворачивает.</div></div><div class="buttons"><button class="btn primary" id="rotate">↻ Поворот</button><button class="btn alt" id="hint">◎ Подсказка</button><button class="btn alt" id="undo">↶ Назад</button><button class="btn alt" id="shuffle">⤨ Сменить</button><button class="btn alt" id="reset">⟲ Заново</button></div></div>
+      <div class="callout" id="notice"><span>●</span><span>Синий факт + зелёное доверие возле красного = переубеждение. Во время переноса увидишь, кто сработает.</span></div>
+    </section>
+    <aside class="sidecol"><section class="sidebox"><h2>Как играть</h2><div class="rule"><span class="symbol red">●</span><div><b>Красные</b><div class="muted">Люди, распространяющие слух. Убери всех.</div></div></div><div class="rule"><span class="symbol">✓</span><div><b>Синие — факты</b><div class="muted">Дают проверенные сведения соседям.</div></div></div><div class="rule"><span class="symbol green">◎</span><div><b>Зелёные — доверие</b><div class="muted">Помогают людям принять опровержение.</div></div></div><div class="rule" id="mediaRule" style="display:none"><span class="symbol gold">◉</span><div><b>Жёлтые — эфир</b><div class="muted">Передают подтверждённый факт на одну или две клетки по прямой.</div></div></div><div class="how"><b>Правило:</b> красный получает факт и доверие — он переубеждён. Новые союзники помогают соседям, а участвовавшие в комбинации фишки затем освобождают места.<br><br><b>Управление:</b> возьми текущую пару пальцем, проведи на игровое поле и отпусти. Короткое касание пары поворачивает её на 90°. Во время перетаскивания можно повернуть вторым пальцем. Если пара не помещается никуда, она автоматически делится на две одиночные фишки. Если поле заполнено, однажды сработает автоматическое освобождение места; повторное переполнение завершает попытку.</div></section>
+    <section class="sidebox"><h2>География уровня</h2><div class="citymap" id="mapArt"></div><div class="legend"><small><i class="dot" style="background:var(--red)"></i> очаг</small><small><i class="dot" style="background:var(--green)"></i> исправление</small><small><i class="dot" style="background:var(--blue)"></i> вода</small></div><p style="margin-top:11px">Форма поля стилизована под район и специально упрощена для головоломки. Это не точная географическая карта.</p><div class="status"><strong>Что тестируем:</strong> размер поля, нестандартный контур, размещение пар, понятность каскадов и разницу между свободной постановкой и падением.</div></section></aside>
+  </main><footer class="ftr"><span>Прототип 0.4: реальное перетаскивание, предпросмотр комбинаций, последовательные каскады. Не финальный дизайн.</span><span>Все инциденты вымышлены · автономно, без сервера</span></footer>
+</div>
+<div id="dragGhost" class="drag-ghost" aria-hidden="true"></div>
+<div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-label="Результат уровня"><div class="modal"><div id="outcomeSub" class="eyebrow">РАУНД ЗАВЕРШЁН</div><h2 id="outcomeTitle">Вброс остановлен!</h2><p id="outcomeMessage"></p><div class="modalactions"><button class="btn primary" id="nextLevel">Следующий район</button><button class="btn" id="retry">Повторить</button><button class="btn" id="closeOverlay">Посмотреть поле</button></div></div></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const levels=[
+ {id:'fatih',name:'Фатих',tag:'Обучение',desc:'Небольшой район · простое поле',w:7,rows:[".#####.","#######","#######","#######","#######","#######",".#####."],rumor:'«Закрывают все городские библиотеки»',moves:18,red:[[2,1],[3,1],[4,2],[2,3],[4,4],[1,5],[3,5],[5,5]],fact:[[1,2],[5,3]],trust:[[2,5]],queue:['FG','GF','F','FG','G','GF','FG'],namePart:'Небольшое компактное поле',seed:103},
+ {id:'kadikoy',name:'Кадыкёй',tag:'Прибрежный',desc:'Береговая линия · меняется ширина поля',w:8,rows:["...#####","..######",".#######","########","########","#######.","######..",".######.","..######","...#####"],rumor:'«Все паромы прекращают движение»',moves:23,red:[[4,0],[5,1],[3,2],[5,3],[1,3],[6,4],[4,4],[2,5],[4,6],[3,7],[5,8],[6,9]],fact:[[3,1],[5,5],[4,8]],trust:[[6,2],[2,4]],queue:['FG','GF','F','FG','GG','G','FG'],namePart:'Вытянутые края и узкие проходы',seed:207},
+ {id:'beyoglu',name:'Бейоглу',tag:'Сложный контур',desc:'Разделённые зоны · мосты между группами',w:9,rows:["##.....##","###...###","####.####","#########","#########",".#######.","#########","####.####","###...###","##.....##","##.....##"],rumor:'«В городе отменили все концерты»',moves:29,red:[[0,0],[8,0],[1,1],[7,1],[2,2],[6,2],[3,3],[5,3],[4,4],[2,5],[6,5],[3,6],[5,6],[2,7],[6,7],[1,9],[7,9]],fact:[[1,3],[7,3],[3,5],[5,7]],trust:[[4,3],[4,6]],media:[[4,5]],queue:['FG','GF','FM','GM','FG','G','FG'],namePart:'Узкий переход и разделённые группы',seed:319}
+];
+const sym={F:'✓',G:'◎',M:'◉'};
+let state,levelIndex=0,mode='free',rot=0,hoverCell=null,busy=false,epoch=0,undoState=null,hintCells=[],hintAnchor=null,lastConverted=[],animated=[],fxTimer=null,randomSeed=1,restartNonce=0;
+let drag=null,previewInfo=null,activeUsed=new Set();
+const dirs=[[0,1],[1,0],[-1,0],[0,-1]];
+function rng(){randomSeed=(Math.imul(randomSeed,1664525)+1013904223)>>>0;return randomSeed/4294967296}
+function pick(a){return a[Math.floor(rng()*a.length)]}
+function clone(a){return JSON.parse(JSON.stringify(a))}
+function k(x,y){return y*state.l.w+x}
+function within(x,y){return x>=0&&x<state.l.w&&y>=0&&y<state.l.rows.length}
+function act(x,y){return within(x,y)&&state.l.rows[y][x]==='#'}
+function get(x,y){return within(x,y)?state.board[k(x,y)]:null}
+function set(x,y,val){state.board[k(x,y)]=val}
+function save(){return {board:state.board.slice(),moves:state.moves,red:state.red,score:state.score,queue:state.queue.slice(),shuffle:state.shuffle,rescue:state.rescue,seed:randomSeed,rot,won:state.won,bonusGiven:state.bonusGiven}}
+function drawMap(){let l=state.l; let coast=l.id==='kadikoy'?'<path d="M0 0 H105 Q97 39 70 74 Q95 96 79 146 L140 180 H0Z" fill="#7a9caf" opacity=".8"/>':l.id==='beyoglu'?'<path d="M0 0 H86 Q80 40 112 62 Q78 96 86 180 H0Z" fill="#7a9caf" opacity=".8"/><path d="M270 0 H320 V180 H270 Q242 120 270 80 Q260 45 270 0" fill="#7a9caf" opacity=".8"/>':'<path d="M0 0 H65 Q80 38 55 83 Q88 111 69 180 H0Z" fill="#7a9caf" opacity=".8"/>';
+let fragments=l.rows.map((row,y)=>[...row].map((c,x)=>c==='#'?`<rect x="${38+x*(235/l.w)}" y="${17+y*(146/l.rows.length)}" width="${210/l.w}" height="${123/l.rows.length}" rx="2" fill="${(x+y)%5===0?'#d9d5c7':'#f1ede1'}" stroke="#b5b2a6" stroke-width=".5"/>`:'' ).join('')).join('');
+$('mapArt').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" aria-label="Схема географии района"><rect width="320" height="180" fill="#e4e5db"/>${coast}${fragments}<circle cx="${l.id==='beyoglu'?156:189}" cy="${l.id==='fatih'?81:105}" r="12" fill="#c9564e" fill-opacity=".8"/><circle cx="${l.id==='beyoglu'?156:189}" cy="${l.id==='fatih'?81:105}" r="22" fill="none" stroke="#c9564e" stroke-dasharray="3 4" stroke-width="2"/><text x="305" y="170" text-anchor="end" fill="#3d4a43" font-weight="800" font-size="13">${l.name.toUpperCase()}</text></svg>`;
+}
+function bagPiece(){let bag=state.l.id==='beyoglu'?['FG','GF','FG','GF','FF','GG','F','G','FM','GM','M']:['FG','GF','FG','GF','FF','GG','F','G'];return pick(bag)}
+function load(i){epoch++;busy=false; $('overlay').classList.remove('show'); levelIndex=(i+levels.length)%levels.length; const l=levels[levelIndex]; randomSeed=((Date.now()>>>0)^l.seed^(++restartNonce*2797))>>>0;rot=0;let board=[];for(let y=0;y<l.rows.length;y++)for(let x=0;x<l.w;x++)board.push(l.rows[y][x]==='#'?'':null);
+let opening=l.queue.slice();for(let j=opening.length-1;j>1;j--){let n=1+Math.floor(rng()*j);[opening[j],opening[n]]=[opening[n],opening[j]];}
+state={l,board,moves:l.moves,score:0,red:l.red.length,queue:opening,shuffle:1,rescue:2,blocked:false,won:false,bonusGiven:false};
+for(const [x,y] of l.red)if(act(x,y))set(x,y,'R');for(const [x,y] of l.fact)if(act(x,y))set(x,y,'F');for(const [x,y] of l.trust)if(act(x,y))set(x,y,'G');for(const [x,y] of (l.media||[]))if(act(x,y))set(x,y,'M');
+undoState=null;hintCells=[];hintAnchor=null;lastConverted=[];animated=[];drag=null;previewInfo=null;activeUsed=new Set();hideGhost();$('fx').textContent='';$('notice').classList.remove('err');
+$('stages').innerHTML=levels.map((it,j)=>`<button type="button" class="stage ${j===levelIndex?'active':''}" data-level="${j}" aria-pressed="${j===levelIndex}"><span class="count">${j+1}/3</span><div class="name">${it.name}</div><div class="meta">${it.tag} · ${it.w}×${it.rows.length}</div></button>`).join('');
+$('levelName').textContent=l.name;$('levelDetail').textContent=l.desc;$('rumorText').textContent=l.rumor.replace(/^«|»$/g,'');$('mediaRule').style.display=l.media?'flex':'none';drawMap();notice('Собери факт и доверие рядом с красной иконкой. Комбинации освобождают клетки!');ensurePlayableQueue();render();}
+function notice(txt,error=false){$('notice').classList.toggle('err',error);$('notice').lastElementChild.textContent=txt}
+function offsets(piece,orientation){if(piece.length===1)return [[0,0]];return [ [[0,0],[1,0]],[[0,0],[0,1]],[[1,0],[0,0]],[[0,1],[0,0]] ][orientation]}
+function coords(x,y,piece,orientation){let o=offsets(piece,orientation);return o.map(([dx,dy])=>[x+dx,y+dy])}
+function validPlacement(c){return !!c&&c.every(([x,y])=>act(x,y)&&get(x,y)==='')}
+function dropAt(x,orientation,piece){let o=offsets(piece,orientation),h=state.l.rows.length;let best=null;for(let yy=-2;yy<h;yy++){let c=o.map(([dx,dy])=>[x+dx,yy+dy]);if(c.some(([xx])=>xx<0||xx>=state.l.w))break;
+if(c.some(([xx,yz])=>yz>=0 && yz<h && act(xx,yz) && get(xx,yz)!=='' ))break;
+if(validPlacement(c))best=c;
+}return best}
+function placement(x,y){let piece=state.queue[0];return mode==='free'?coords(x,y,piece,rot):dropAt(x,rot,piece)}
+function cellHTML(v){if(v==='R')return '<span class="human"></span>';if(v==='F'||v==='G'||v==='M')return `<span class="glyph">${sym[v]}</span>`;return ''}
+function viewportCell(){let w=Math.min(document.querySelector('.playcard').clientWidth-26, 580),height=window.innerHeight,rows=state.l.rows.length;let maxByHeight=window.innerWidth<560?Math.max(25, Math.floor((height-370-rows*3)/Math.max(1,rows))):44;return Math.max(23,Math.min(43,Math.floor((w-3*(state.l.w-1))/state.l.w),maxByHeight))}
+function render(){if(!state)return;const l=state.l;
+$('reds').textContent=state.red;$('moves').textContent=state.moves;$('score').textContent=state.score;
+let c=viewportCell();$('board').style.setProperty('--cols',l.w);$('board').style.setProperty('--cell',c+'px');$('board').innerHTML='';
+let preview=null;if(hoverCell&&!busy&&!state.won)preview=placement(hoverCell[0],hoverCell[1]);
+for(let y=0;y<l.rows.length;y++)for(let x=0;x<l.w;x++){
+const v=get(x,y);let btn=document.createElement('button');btn.type='button';btn.className='cell '+(v===null?'inactive':v===''?'free':'occupied '+(v==='R'?'red':v));btn.dataset.x=x;btn.dataset.y=y;btn.dataset.index=k(x,y);btn.setAttribute('role','gridcell');btn.setAttribute('aria-label',v===null?'Нет клетки':v==='R'?'Распространитель слуха':v==='F'?'Фактчекер':v==='G'?'Доверенный участник':v==='M'?'Медиаканал':'Пустая клетка');btn.innerHTML=cellHTML(v);
+if(v==='R'&&isSource(x,y))btn.innerHTML+='<span class="source-mark">!</span>';
+if(lastConverted.includes(k(x,y)))btn.classList.add('convert');if(activeUsed.has(k(x,y)))btn.classList.add('being-used');if(animated.includes(k(x,y)))btn.classList.add('newpiece');if(hintCells.some(([xx,yy])=>xx===x&&yy===y))btn.classList.add(hintAnchor&&hintAnchor[0]===x&&hintAnchor[1]===y?'hint':'hint-secondary');if(preview&&preview.some(([xx,yy])=>xx===x&&yy===y))btn.classList.add('preview');if(previewInfo&&previewInfo.valid){if(previewInfo.convert.has(k(x,y)))btn.classList.add('will-convert');if(previewInfo.consume.has(k(x,y)))btn.classList.add('will-consume');}
+if(v!==null)btn.addEventListener('click',(ev)=>{if(matchMedia('(pointer:coarse)').matches){notice('Чтобы поставить фишку: возьми её из нижней панели и проведи пальцем до клетки.');return;}if(drag)return;place(x,y);});
+if(v==='')btn.addEventListener('mouseenter',()=>{hoverCell=[x,y];if(!busy)drawPreview()});
+$('board').appendChild(btn);
+}
+$('currentPair').style.flexDirection=['row','column','row-reverse','column-reverse'][rot];$('currentPair').innerHTML=[...(state.queue[0]||'')].map(t=>`<div class="unit ${t}">${sym[t]||t}</div>`).join('');$('nextPair').innerHTML=[...(state.queue[1]||'')].map(t=>`<div class="unit ${t}">${sym[t]||t}</div>`).join('');$('thirdPair').innerHTML=[...(state.queue[2]||'')].map(t=>`<div class="unit ${t}">${sym[t]||t}</div>`).join('');
+$('directions').textContent=mode==='free'?'Тяни фишку пальцем на поле · отпусти для хода':'Тяни фишку пальцем на поле · отпусти для хода';$('statusLite').textContent=busy?'Цепная реакция…':state.won?'Победа':`Обмен: ${state.shuffle} · Защита: ${state.rescue}`;
+for(let id of ['rotate','hint','shuffle'])$(id).disabled=busy||state.won||(id==='shuffle'&&state.shuffle===0);$('undo').disabled=busy||!undoState;
+}
+function drawPreview(){
+ document.querySelectorAll('.cell.preview,.cell.will-convert,.cell.will-consume').forEach(el=>el.classList.remove('preview','will-convert','will-consume'));
+ previewInfo=null;if(!hoverCell||busy||!state||state.won){showPreviewStatus('');return;}
+ let coordsArr=placement(...hoverCell),valid=validPlacement(coordsArr);
+ if(!valid){showPreviewStatus('Нет места для этой пары');return}
+ let b=state.board.slice();const piece=state.queue[0];coordsArr.forEach(([x,y],i)=>b[k(x,y)]=piece[i]);
+ const simulation=computeCascade(b);
+ previewInfo={valid:true,convert:new Set(simulation.waves.flat().map(([x,y])=>k(x,y))),consume:new Set(simulation.consumed),count:simulation.count,depth:simulation.waves.length};
+ for(const [x,y] of coordsArr){let a=document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);if(a)a.classList.add('preview')}
+ for(const id of previewInfo.convert){let a=document.querySelector(`.cell[data-index="${id}"]`);if(a)a.classList.add('will-convert')}
+ for(const id of previewInfo.consume){let a=document.querySelector(`.cell[data-index="${id}"]`);if(a)a.classList.add('will-consume')}
+ showPreviewStatus(previewInfo.count?`Будут переубеждены: ${previewInfo.count} · волн: ${previewInfo.depth}`:'Поставь, чтобы подготовить комбинацию');
+}
+function showPreviewStatus(msg){const el=$('previewNotice');if(el)el.textContent=msg;}
+
+function isSource(x,y){return state.l.red.some(([xx,yy],j)=>j===0&&xx===x&&yy===y)}
+function hasFact(x,y,board=state.board){let l=state.l;let getv=(xx,yy)=>xx>=0&&xx<l.w&&yy>=0&&yy<l.rows.length?board[yy*l.w+xx]:null;return dirs.some(([dx,dy])=>getv(x+dx,y+dy)==='F') || (l.media?dirs.some(([dx,dy])=>getv(x+dx*2,y+dy*2)==='M'):false)}
+function hasTrust(x,y,board=state.board){let l=state.l;return dirs.some(([dx,dy])=>{let xx=x+dx,yy=y+dy;return xx>=0&&xx<l.w&&yy>=0&&yy<l.rows.length&&board[yy*l.w+xx]==='G'})}
+function findSupporters(x,y,b){
+  let l=state.l, fact=null, trust=null;
+  for(let [dx,dy] of dirs){let xx=x+dx,yy=y+dy;
+    if(xx>=0&&xx<l.w&&yy>=0&&yy<l.rows.length){let v=b[yy*l.w+xx];if(v==='F'&&!fact)fact=[xx,yy];if(v==='G'&&!trust)trust=[xx,yy];}
+  }
+  if(!fact && l.media)for(let dist of [1,2]){for(let [dx,dy] of dirs){let xx=x+dx*dist,yy=y+dy*dist;if(xx>=0&&xx<l.w&&yy>=0&&yy<l.rows.length&&b[yy*l.w+xx]==='M'){fact=[xx,yy];break;}}if(fact)break;}
+  return fact && trust ? [fact,trust] : null;
+}
+function computeCascade(board){
+ let l=state.l,waves=[],b=board.slice(),used=new Set(),converted=new Set();
+ for(let t=0;t<l.red.length+3;t++){
+   let found=[];
+   for(let y=0;y<l.rows.length;y++)for(let x=0;x<l.w;x++){
+     if(b[y*l.w+x]!=='R')continue;
+     let supporters=findSupporters(x,y,b);
+     if(supporters){found.push([x,y]);for(let [sx,sy] of supporters)used.add(sy*l.w+sx);}
+   }
+   if(!found.length)break;
+   for(let [x,y] of found){b[y*l.w+x]='G';converted.add(y*l.w+x);}
+   waves.push(found);
+ }
+ // Converteds remain G for the whole cascade. After it ends they and the
+ // supporting F/G/M resources are consumed, freeing space for the next piece.
+ let consumed=new Set([...used,...converted]);
+ for(let idx of consumed)b[idx]='';
+ return {waves,board:b,count:waves.flat().length,consumed};
+}
+function canPlacePiece(piece){
+  let l=state.l;
+  for(let rotation=0;rotation<4;rotation++)for(let y=0;y<l.rows.length;y++)for(let x=0;x<l.w;x++){
+   let c=mode==='free'?coords(x,y,piece,rotation):dropAt(x,rotation,piece);
+   if(validPlacement(c))return true;
+  }
+  return false;
+}
+function freeSupportSpace(){
+  // One emergency relief per attempt; never remove red opponents for free.
+  let all=[];for(let y=0;y<state.l.rows.length;y++)for(let x=0;x<state.l.w;x++){
+   let v=get(x,y);if(v==='F'||v==='G'||v==='M'){
+    const nearR=dirs.filter(([dx,dy])=>get(x+dx,y+dy)==='R').length;
+    all.push({x,y,nearR,rank:rng()});
+   }
+  }
+  all.sort((a,b)=>a.nearR-b.nearR||a.rank-b.rank);
+  let cleared=0;
+  for(let p of all.slice(0,Math.min(5,all.length))){set(p.x,p.y,'');cleared++;if(canPlacePiece(state.queue[0])&&cleared>=2)break;}
+  return cleared;
+}
+function ensurePlayableQueue(){
+ if(!state || state.won || state.red===0 || state.moves<=0)return '';
+ while(state.queue.length<3)state.queue.push(bagPiece());
+ if(canPlacePiece(state.queue[0]))return '';
+ const blocked=state.queue[0];
+ if(blocked.length>1){
+   // Preserve the exact units, split their placement into successive turns.
+   state.queue.splice(0,1,blocked[0],blocked[1]);rot=0;
+   if(canPlacePiece(state.queue[0]))return 'Пара не помещалась: автоматически разделена на одиночные фишки. Состав сохранён.';
+ }
+ if(state.rescue>0){
+   state.rescue--;const cleared=freeSupportSpace();
+   if(cleared && canPlacePiece(state.queue[0]))return `Сеть переполнена. Автоматически освобождено ${cleared} клеток (разовая защита от тупика).`;
+ }
+ // Further filling is a legitimate loss, not an endlessly unresponsive board.
+ state.blocked=true;return 'Мест для размещения больше нет: попытка завершена. Попробуй иной порядок ходов.';
+}
+async function place(x,y){if(busy||state.won||state.blocked)return;let c=placement(x,y);if(!validPlacement(c)){notice(mode==='free'?'Пара не помещается здесь. Выбери свободные клетки или поверни.':'В этой колонке пара не помещается. Попробуй другую или поверни.',true);return}
+undoState=save();busy=true;hintCells=[];hintAnchor=null;lastConverted=[];animated=[];const myEpoch=epoch;let piece=state.queue.shift();for(let i=0;i<c.length;i++){set(...c[i],piece[i]);animated.push(k(...c[i]))}state.queue.push(bagPiece());state.moves--;render();await sleep(120);if(myEpoch!==epoch)return;
+let r=computeCascade(state.board),total=0;activeUsed=new Set([...r.consumed].filter(id=>['F','G','M'].includes(state.board[id])));render();for(let wave of r.waves){lastConverted=[];for(let [xx,yy] of wave){set(xx,yy,'G');lastConverted.push(k(xx,yy));}total+=wave.length;state.red-=wave.length;state.score+=wave.length*(100+Math.min(3,r.waves.indexOf(wave))*100);
+ if(r.waves.indexOf(wave)===0 && r.count>=3)state.score+=r.count*35;animated=[];if(total>1)showFx(`КОМБО ×${total}${r.waves.length>1?' · КАСКАД '+r.waves.length:''}`);render();await sleep(220);if(myEpoch!==epoch)return;}
+// Consume successful combinations only after all cascading waves are visible.
+if(total){state.board=r.board.slice();state.score+=r.consumed.size*8;
+ if(!state.bonusGiven && r.waves.length>=2 && total>=4){state.moves++;state.bonusGiven=true;notice(`Сильный каскад ×${r.waves.length}: +1 ход! Переубеждено ${total} человек.`);}}
+lastConverted=[];animated=[];activeUsed=new Set();busy=false;
+if(state.red===0){state.won=true;render();outcome(true);return}
+if(state.moves<=0){render();outcome(false);return}
+const safety=ensurePlayableQueue();
+if(safety){notice(safety,!!state.blocked);}else if(state.bonusGiven && r.waves.length>=2 && total>=4){notice(`Каскад: ${r.waves.length} волны · переубеждено ${total} · бонус +1 ход`);}else if(total){notice(total>=4?`Комбо ×${total}! Задействованные фишки освободили клетки для следующих ходов.`:`Переубеждено: ${total}. Использованные фишки освобождают клетки.`)}else{notice('Комбинации пока нет. Подготовь синий факт и зелёное доверие рядом с красным.');}
+render();if(state.blocked){outcome(false,'Поле переполнено');return}
+}
+function showFx(txt){$('fx').textContent=txt;clearTimeout(fxTimer);fxTimer=setTimeout(()=>$('fx').textContent='',800)}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function outcome(won,reason='Ходы закончились'){$('overlay').classList.add('show');$('outcomeSub').textContent=won?'ИНФОРМАЦИЯ ВОССТАНОВЛЕНА':'ПОПРОБУЙ ЕЩЁ РАЗ';$('outcomeTitle').textContent=won?'Вброс остановлен!':reason;$('outcomeMessage').textContent=won?`В районе «${state.l.name}» не осталось красных распространителей. Очки: ${state.score}. Попробуй следующий контур поля.`:`Осталось распространителей: ${state.red}. При новой попытке выпадет другая последовательность юнитов. Ищи удачные каскады.`;$('nextLevel').style.display=won?'inline-block':'none';}
+function rotate(){if(busy||state.won)return;rot=(rot+1)%4;hintCells=[];render()}
+function shuffle(){if(busy||state.won||state.shuffle<1)return;state.queue[0]=bagPiece();state.shuffle--;hintCells=[];const safety=ensurePlayableQueue();notice(safety||'Фишка заменена. Обмен больше недоступен в этом раунде.',!!state.blocked);render();if(state.blocked)outcome(false,'Поле переполнено')}
+function hint(){if(busy||state.won)return;let l=state.l,best=null;for(let r=0;r<4;r++){for(let y=0;y<l.rows.length;y++)for(let x=0;x<l.w;x++){let c=mode==='free'?coords(x,y,state.queue[0],r):dropAt(x,r,state.queue[0]);if(!validPlacement(c))continue;let b=state.board.slice();for(let j=0;j<c.length;j++)b[k(...c[j])]=state.queue[0][j];let score=computeCascade(b).count;let min=(c[0]||[0,0])[1];let rating=score*100+min/8;if(!best||rating>best.rating)best={c,r,rating,score,anchor:[x,y]};}}
+if(!best){notice('Для текущей пары нет доступного размещения. Используй «Сменить» или перезапусти уровень.',true);return}rot=best.r;hintCells=best.c;hintAnchor=best.anchor;hoverCell=null;render();notice(best.score>0?`Подсказка: перетащи текущую пару на клетки в тёмной рамке — переубедишь минимум ${best.score} участников.`:'Подсказка: перетащи пару в тёмную рамку, чтобы подготовить комбинацию.');}
+function restart(){load(levelIndex)}
+$('stages').addEventListener('click',e=>{let t=e.target.closest('[data-level]');if(t)load(Number(t.dataset.level))});
+
+$('rotate').addEventListener('click',()=>{rotate();if(drag?.active)updateDrag(drag.x,drag.y);});$('shuffle').addEventListener('click',shuffle);$('reset').addEventListener('click',restart);$('hint').addEventListener('click',hint);
+$('undo').addEventListener('click',()=>{if(busy||!undoState)return;const u=undoState;undoState=null;Object.assign(state,{board:u.board,moves:u.moves,red:u.red,score:u.score,queue:u.queue,shuffle:u.shuffle,rescue:u.rescue,won:u.won,bonusGiven:u.bonusGiven,blocked:false});randomSeed=u.seed;rot=u.rot;hintCells=[];lastConverted=[];animated=[];activeUsed=new Set();showPreviewStatus('');notice('Последний ход отменён.');render()});
+$('nextLevel').addEventListener('click',()=>load(levelIndex+1));$('retry').addEventListener('click',restart);$('closeOverlay').addEventListener('click',()=>$('overlay').classList.remove('show'));window.addEventListener('keydown',e=>{if(e.key==='r'||e.key==='R'||e.key==='ArrowUp'){e.preventDefault();rotate()}if(e.key==='Escape')$('overlay').classList.remove('show')});
+window.addEventListener('resize',()=>render());document.getElementById('board').addEventListener('mouseleave',()=>{hoverCell=null;drawPreview()});
+
+// Primary mobile interaction: tap to rotate, hold-and-swipe to move, release to place.
+// Pointer capture keeps the gesture alive when the finger moves away from the tray.
+const tray=$('currentPair');
+function hideGhost(){const el=$('dragGhost');if(el)el.style.display='none';}
+function paintGhost(){if(!drag||!drag.active)return;const el=$('dragGhost'),piece=state.queue[0]||'';
+ const cells=offsets(piece,rot);const cw=drag.cellSize||36;
+ const gap=3,maxX=Math.max(...cells.map(p=>p[0])),maxY=Math.max(...cells.map(p=>p[1]));
+ const boxW=(maxX+1)*cw+maxX*gap,boxH=(maxY+1)*cw+maxY*gap;
+ el.style.display='block';el.style.width=boxW+'px';el.style.height=boxH+'px';
+ el.innerHTML=cells.map(([dx,dy],i)=>`<div class="unit ${piece[i]}" style="position:absolute;left:${dx*(cw+gap)}px;top:${dy*(cw+gap)}px;width:${cw-2}px;height:${cw-2}px">${sym[piece[i]]||''}</div>`).join('');
+ if(hoverCell){const rect=$('board').getBoundingClientRect();el.style.left=(rect.left+hoverCell[0]*(cw+gap)+boxW/2)+'px';el.style.top=(rect.top+hoverCell[1]*(cw+gap)+boxH/2)+'px';}
+ else {el.style.left=drag.x+'px';el.style.top=(drag.y-DRAG_OFFSET)+'px';}
+}
+const DRAG_OFFSET=54;
+function coordForPoint(px,py){const board=$('board'),rect=board.getBoundingClientRect(),w=state.l.w,h=state.l.rows.length;
+ const css=getComputedStyle(board),gap=parseFloat(css.columnGap)||3;const size=parseFloat(css.getPropertyValue('--cell'))||36;
+ const x=Math.floor((px-rect.left)/(size+gap)),y=Math.floor((py-rect.top)/(size+gap));
+ if(x<0||y<0||x>=w||y>=h)return null;
+ return [x,y];
+}
+function updateDrag(x,y){if(!drag)return;drag.x=x;drag.y=y;drag.cellSize=parseFloat(getComputedStyle($('board')).getPropertyValue('--cell'))||36;
+ hoverCell=coordForPoint(x,y-DRAG_OFFSET);paintGhost();drawPreview();
+ $('dragGhost').classList.toggle('bad',!previewInfo?.valid);
+}
+tray.addEventListener('pointerdown',e=>{
+ if(busy||!state||state.won||state.blocked)return;
+ if(drag && drag.id!==e.pointerId){e.preventDefault();rot=(rot+1)%4;render();updateDrag(drag.x,drag.y);return}
+ e.preventDefault();drag={id:e.pointerId,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,active:false,cellSize:36};
+ tray.setPointerCapture?.(e.pointerId);
+});
+tray.addEventListener('pointermove',e=>{
+ if(!drag||drag.id!==e.pointerId)return;
+ e.preventDefault();if(!drag.active && Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)>7)drag.active=true;
+ if(drag.active)updateDrag(e.clientX,e.clientY);
+});
+function finishDrag(e,cancel=false){if(!drag||e.pointerId!==drag.id)return;
+ const d=drag,wasActive=d.active;let anchor=null,valid=false;
+ if(wasActive&&!cancel){updateDrag(e.clientX,e.clientY);anchor=hoverCell?hoverCell.slice():null;valid=anchor && validPlacement(placement(...anchor));}
+ drag=null;hideGhost();hoverCell=null;previewInfo=null;showPreviewStatus('');
+ if(!wasActive&&!cancel){rotate();return}
+ if(wasActive && valid){place(...anchor);return}
+ drawPreview();if(wasActive && !cancel)notice('Пара вернулась в очередь. Отпусти её над свободными клетками.',true);
+}
+tray.addEventListener('pointerup',e=>finishDrag(e));tray.addEventListener('pointercancel',e=>finishDrag(e,true));
+// A second finger on the board rotates the carried piece; desktop R also works.
+document.addEventListener('pointerdown',e=>{if(drag?.active && drag.id!==e.pointerId && e.pointerType==='touch' && !e.target.closest('#currentPair')){e.preventDefault();rot=(rot+1)%4;render();updateDrag(drag.x,drag.y)}},true);
+$('board').addEventListener('touchmove',e=>{if(drag?.active)e.preventDefault()},{passive:false});
+load(0);
+})();
+</script>
+</body>
+</html>
