@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#eeeae1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ВБРОС 0.9">
-<title>ВБРОС 0.9 — Заражение</title>
+<meta name="theme-color" content="#eeeae1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ВБРОС 0.9.2">
+<title>ВБРОС 0.9.2 — Чистые фишки</title>
 <style>
 :root{--paper:#edeae2;--cream:#fffdf8;--ink:#233233;--muted:#6f7974;--line:#d4d7ce;--blue:#4a82a3;--green:#5c997b;--gold:#bb963d;--red:#cb5e55;--dark:#292d35;--size:39px;--gap:3px}
 *{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:radial-gradient(ellipse at top,#f7f4eb 0,#e8e8e2 78%)}
@@ -25,11 +25,29 @@ button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch
 @media(max-width:770px){.app{padding:9px 8px 25px}.layout{grid-template-columns:1fr}.side{margin-top:1px}.main{padding:8px 9px}.intro h1{font-size:20px}.wordmark{font-size:27px}.version{font-size:9px}.levels{gap:5px}.level{min-width:125px;padding:6px 8px}.story{margin:7px 0;font-size:12px}.city{height:51px}.citytext strong{font-size:15px}.citytext{font-size:10px}.scoreboard{margin:6px 0}.metric{padding:6px 9px}.metric strong{font-size:21px}.threat{min-height:30px;margin-bottom:5px}.boardwrap{padding:5px 2px 8px}.tile{border-radius:7px}.notice{margin-top:7px;padding:8px 10px;min-height:35px}.controls{margin-top:7px}.controls button{min-height:36px}.side{padding:12px}}
 @media(max-height:740px) and (max-width:770px){.city{height:46px}.story{padding:7px}.metric strong{font-size:19px}.boardwrap{padding:5px 2px 6px}.controls{margin-top:4px}.notice{margin-top:4px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* 0.9.1 — visual comparison skin: no words on tiles, compact pictograms. */
+.tile{justify-content:center;gap:0;padding:0}
+.tile svg{width:44%;height:44%;max-height:19px;min-height:9px;stroke-width:2.1;flex:none}
+.tile.B svg{width:48%;height:48%;stroke-width:1.9}
+.tile.N svg{width:40%;height:40%;stroke-width:2.05}
+.tile.DF svg,.tile.DL svg,.tile.DM svg{width:50%;height:50%;max-height:22px;stroke-width:2.2}
+.tile label{display:none!important}
+.tile .hp{right:2px;top:0;font-size:10px}
+.tile .badge{top:1px;left:1px;font-size:9px}
+@media(max-width:770px){.tile svg{width:43%;height:43%;max-height:19px}.tile.DF svg,.tile.DL svg,.tile.DM svg{width:49%;height:49%}}
+
+/* V0.9.2: natural short directional swipe on touch and mouse */
+.board .tile{will-change:transform;}
+.board .tile.gesture-src,.board .tile.gesture-dst{z-index:12;transition:none;pointer-events:none;}
+.board .tile.gesture-src{outline:2px solid #fff9;outline-offset:-2px;filter:brightness(1.06);}
+.board .tile.gesture-dst{z-index:11;filter:brightness(.98);}
+@media(prefers-reduced-motion:reduce){.board .tile{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div class="app">
- <header class="mast"><div><span class="wordmark">ВБР<span>О</span>С</span><span class="version">0.9 · ЗАРАЖЕНИЕ</span></div><div class="top-actions"><span class="caps">CIVIC PRINT</span><button class="pill" id="helpTop">?</button></div></header>
+ <header class="mast"><div><span class="wordmark">ВБР<span>О</span>С</span><span class="version">0.9.2 · СВАЙП</span></div><div class="top-actions"><span class="caps">CIVIC PRINT</span><button class="pill" id="helpTop">?</button></div></header>
  <div class="levels" id="levelButtons"></div>
  <div class="layout"><main class="main">
   <div class="intro"><div><div class="caps" id="levelTag">СТАМБУЛ · ЭПИЗОД 01</div><h1 id="district">Фатих</h1></div><span class="tag" id="difficulty">ОБУЧЕНИЕ</span></div>
@@ -37,19 +55,19 @@ button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch
   <div class="city" id="cityScene"><svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMax slice"><g fill="#668782" opacity=".18"><path d="M0 90V55h40V40h30v50h22V30h45v60h18V48h38v42h21V15h33v75h26V50h36v40h18V30h34v60h19V60h30v30h21V36h46v54h24V45h39v45h22V64h37v26Z"/></g><path d="M0 85 Q130 55 260 83 T600 70" fill="none" stroke="#9bafaa" stroke-width="2" opacity=".45"/><path d="M40 88h530" stroke="#75928d" stroke-width="2" opacity=".5"/></svg><div class="citytext"><span id="cityMood">СИТУАЦИЯ В РАЙОНЕ</span><strong id="cityOutcome">Слух набирает охват</strong></div><div class="city-bar" id="cityBar"></div></div>
   <div class="scoreboard"><div class="metric"><small>СЛУХОВ</small><strong id="redCount">0</strong></div><div class="metric"><small>ХОДОВ</small><strong id="moveCount">0</strong></div><div class="metric"><small>ЖИТЕЛЕЙ</small><strong id="neutralCount">0</strong></div></div>
   <div class="threat safe" id="threat"><span class="dot"></span><span id="threatText">Всё спокойно</span></div>
-  <div class="boardwrap" id="boardWrap"><div class="board" id="board" aria-label="Игровое поле. Проведи между соседними фишками, чтобы поменять местами."></div></div>
-  <div class="tipline"><span id="turnInfo">Меняй соседние фишки одним свайпом</span><strong id="scoreInfo">0 ОЧКОВ</strong></div>
+  <div class="boardwrap" id="boardWrap"><div class="board" id="board" aria-label="Игровое поле. Коротко сдвинь фишку пальцем влево, вправо, вверх или вниз. Неудачный обмен отменится."></div></div>
+  <div class="tipline"><span id="turnInfo">Короткий свайп по фишке в любую сторону</span><strong id="scoreInfo">0 ОЧКОВ</strong></div>
   <div class="controls"><button class="primary" id="hintBtn">✧ Подсказка</button><button id="undoBtn">↶ Отмена</button><button id="resetBtn">↻ Заново</button></div>
   <div class="notice" id="notice" aria-live="polite">Соедини три одинаковые фишки. Большие комбинации создают усиления.</div>
  </main><aside class="side">
-  <h2>Как играть в 0.9</h2><p>Поле заполнено. <b>Свайпни между соседними цветными фишками</b>, чтобы собрать три или больше в линию. После совпадения новые фишки падают сверху.</p>
+  <h2>Как играть в 0.9.2</h2><p>Поле заполнено. <b>Проведи по фишке вверх, вниз, влево или вправо</b>, чтобы собрать три или больше в линию. После совпадения новые фишки падают сверху.</p>
   <div class="rule"><div class="ruleicon" style="background:#4a82a3">4</div><div><b>4 Факта в линию → Досье</b><small>Точное попадание по выбранному Слуху</small></div></div>
   <div class="rule"><div class="ruleicon" style="background:#5c997b">2×2</div><div><b>4 Лидера квадратом → Эффект лидера</b><small>Переубеждение в радиусе двух клеток</small></div></div>
   <div class="rule"><div class="ruleicon" style="background:#bb963d">5</div><div><b>5 СМИ в линию → Прямой эфир</b><small>До шести связанных распространителей</small></div></div>
   <div class="helper">Три одинаковых в линию просто очищают клетки. Если совпадение касается Слуха, оно также устраняет <b>одного</b> соседнего распространителя. Большое усиление остаётся на поле: <b>выбери его, затем выбери красную цель</b>.</div>
   <hr><h3>Фишки</h3><div class="legend"><div class="leg"><i class="dotcol" style="background:#4a82a3"></i>Факт</div><div class="leg"><i class="dotcol" style="background:#5c997b"></i>Лидер</div><div class="leg"><i class="dotcol" style="background:#bb963d"></i>СМИ</div><div class="leg"><i class="dotcol" style="background:#cb5e55"></i>Слух</div><div class="leg"><i class="dotcol" style="background:#292d35;border:2px solid #d2ae70"></i>Источник</div><div class="leg"><i class="dotcol" style="background:#c2cac5"></i>Житель</div></div>
   <h3>Слухи объединяются</h3><p><b>2 рядом → Шёпот</b> (угрожает одному). <b>3 рядом → Эхо</b> (двум). <b>4 → Сеть</b> (дальше). <b>5+ → Паника</b> (массовая волна).</p><p>Новые Слухи появляются только у существующих Жителей. Предупреждение видно за ход до заражения. Разорви красную группу, чтобы ослабить её.</p>
-  <div class="warningbox"><b>В этой версии проверяем новое ядро.</b> Нет падающих пар из старого демо, смешанных сочетаний «Факт + Лидер» и покупок. Следующий шаг — баланс сложности и оценка удовольствия от совпадений.</div>
+  <div class="warningbox"><b>В 0.9.2 проверяем быстрое управление:</b> короткий свайп по цветной фишке меняет её с соседней; если совпадения нет, обмен отменяется и ход сохраняется. Значение цветов — в легенде выше. <b>В этой версии проверяем новое ядро.</b> Нет падающих пар из старого демо, смешанных сочетаний «Факт + Лидер» и покупок. Следующий шаг — баланс сложности и оценка удовольствия от совпадений.</div>
  </aside></div>
 </div>
 <div class="overlay" id="overlay"><div class="modal"><div class="emblem" id="modalIcon">✦</div><h2 id="modalTitle">Уровень пройден</h2><p id="modalText"></p><div class="actions"><button id="modalReplay">Повторить</button><button class="primary" id="modalNext">Следующий инцидент</button></div></div></div>
@@ -116,7 +134,7 @@ function presets(){const l=level(),fixed=[];const set=(x,y,t)=>{if(!valid(x,y))r
  let i=choose(bad),other=['F','L','M'].filter(t=>t!==board[i]);board[i]=choose(other);
  }
 }
-function setStage(n){session++;stage=n;seed=level().seed;hp={};residentGuard={};pending=[];score=0;turn=0;selected=-1;boost=-1;highlight=[];tipCells=[];busy=false;over=false;undo=null;spreadingPaused=false;recentBorn.clear();lastHit.clear();hintCells.clear();moves=level().moves;initialFill();presets();initialRed=totalRed();pending=chooseWarnings();$('overlay').classList.remove('visible');drawLevels();draw();say('Меняй соседние фишки. 3 одинаковых исчезают; 4 Факта в линию дают Досье.');if(level().preset==='facts')showTip('Начни здесь: смени местами Факт и Лидера возле верхней части поля, чтобы получить Досье.',false)}
+function setStage(n){session++;stage=n;seed=level().seed;hp={};residentGuard={};pending=[];score=0;turn=0;selected=-1;boost=-1;highlight=[];tipCells=[];busy=false;over=false;undo=null;spreadingPaused=false;recentBorn.clear();lastHit.clear();hintCells.clear();moves=level().moves;initialFill();presets();initialRed=totalRed();pending=chooseWarnings();$('overlay').classList.remove('visible');drawLevels();draw();say('Коротко сдвигай фишку в любую сторону. Нет совпадения — вернётся обратно без потери хода.');if(level().preset==='facts')showTip('Начни здесь: смени местами Факт и Лидера возле верхней части поля, чтобы получить Досье.',false)}
 function drawLevels(){$('levelButtons').innerHTML=LEVELS.map((l,i)=>`<button class="level ${i===stage?'on':''}" data-lvl="${i}"><b>${i+1}. ${l.district}</b><small>${l.kind} · ${l.moves} ходов</small></button>`).join('')}
 function stageMarks(){let map={};for(let g of groupR()){if(g.length<2)continue;let n=redStage(g.length),m=Math.min(...g);map[m]={s:n.name,n:g.length};}return map}
 function draw(){let l=level();$('district').textContent=l.district;$('difficulty').textContent=l.badge;$('levelTag').textContent=`СТАМБУЛ · ИНЦИДЕНТ ${String(stage+1).padStart(2,'0')}`;$('rumorHeadline').textContent=l.title;$('redCount').textContent=totalRed();$('moveCount').textContent=moves;$('neutralCount').textContent=board.filter(x=>x==='N').length;$('scoreInfo').textContent=`${score.toLocaleString('ru-RU')} ОЧКОВ`;$('turnInfo').textContent=boost>=0?'Усиление выбрано → укажи красную цель':`Ход ${turn} · свайпни соседние цветные фишки`;
@@ -124,7 +142,7 @@ function draw(){let l=level();$('district').textContent=l.district;$('difficulty
  $('threat').classList.toggle('safe',pending.length===0);$('threatText').textContent=pending.length?`⚠ Следующий ход: под угрозой ${pending.length} житель${pending.length===1?'':pending.length<5?'я':'ей'}`:l.spawn?'Новые заражения пока не готовятся':'Обучение: без новых заражений';
  const marks=stageMarks(),warns=new Set(pending.map(p=>p.i)),high=new Set(highlight),hint=new Set(hintCells);let s='';for(let y=0;y<l.mask.length;y++)for(let x=0;x<l.w;x++){let i=index(x,y),t=board[i];if(!valid(x,y)){s+='<div class="tile off"></div>';continue;}let cls=`tile ${t||'empty'}${i===selected?' selected':''}${warns.has(i)?' warn':''}${high.has(i)?' damage':''}${hint.has(i)?' suggest':''}${recentBorn.has(i)?' justBorn':''}${lastHit.has(i)?' flash':''}`;
  let extra=t==='B'?`<span class="hp">${hp[i]||1}</span>`:marks[i]?`<span class="badge">${marks[i].n}</span>`:'';if(t==='N'&&residentGuard[i]>0)extra='<span class="badge" style="background:#448e7b">✓</span>';
- s+=`<div class="${cls}" data-i="${i}" role="button" aria-label="${names[t]||'Пустая'}">${svg(t)}<label>${names[t]||''}</label>${extra}</div>`}
+ s+=`<div class="${cls}" data-i="${i}" role="button" aria-label="${names[t]||'Пустая'}">${svg(t)}${extra}</div>`}
  $('board').innerHTML=s;$('board').style.setProperty('--width',l.w);$('hintBtn').disabled=busy||over;$('undoBtn').disabled=!undo||busy||over;resizeBoard();}
 function resizeBoard(){let w=$('boardWrap').clientWidth-14,n=level().w;let size=Math.min(45,Math.floor((w-((n-1)*3))/n));document.documentElement.style.setProperty('--size',Math.max(30,size)+'px');}
 function say(msg,bad=false){let e=$('notice');e.textContent=msg;e.classList.toggle('bad',bad)}
@@ -219,7 +237,7 @@ async function finishTurn(info){let ticket=session;
  else if(pending.length)say(`${info} На следующем ходу под угрозой ${pending.length} житель${pending.length===1?'':'я'}.`);
  else say(info);
 }
-async function doSwap(a,b){if(busy||over)return false;if(!matchForSwap(a,b)){say('Нужна комбинация из трёх одинаковых в ряд или квадрат 2×2 из Лидеров.',true);highlight=[];draw();return false}
+async function doSwap(a,b){if(busy||over)return false;if(!matchForSwap(a,b)){say('Комбинация не собралась — фишка вернулась. Ход сохранён.',true);highlight=[];draw();return false}
  storeUndo();busy=true;swap(a,b);moves--;turn++;selected=-1;boost=-1;hintCells.clear();lastHit=new Set([a,b]);draw();await sleep(170);if(!busy)return false;
  let results=await settle([a,b]);if(!busy)return false;
  let txt=results.booster?`Создано усилений: ${results.booster}.`:`Совпадение! +${score} очков.`;
@@ -233,31 +251,143 @@ async function activateBoost(origin,target){if(busy||over||!POWERS.has(board[ori
 function end(won){if(over)return;over=true;busy=false;selected=-1;boost=-1;highlight=[];draw();$('modalIcon').textContent=won?'✦':'↻';$('modalTitle').textContent=won?'Вброс остановлен!':'Слух победил в этом раунде';$('modalText').textContent=won?`${level().result}. Ты завершил инцидент, набрал ${score} очков и защитил район от распространения.`:`Красных осталось: ${totalRed()}. Попробуй прежде всего разрушать соседние красные группы, а потом накапливать мощные усиления.`;$('modalNext').textContent=won?'Следующий инцидент':'Повторить уровень';$('overlay').classList.add('visible')}
 function showHint(){if(busy||over)return;hintCells.clear();highlight=[];if(boost>=0){let reds=allR();if(reds.length){let t=reds.reduce((best,i)=>previewBoost(boost,i).length>previewBoost(boost,best).length?i:best,reds[0]);highlight=previewBoost(boost,t);say(`Усиление ${names[board[boost]]}: выбери подсвеченную красную цель.`)}}else{let avail=legalMoves();if(avail.length){let rank=pair=>{swap(...pair);let e=findMatches().entries;let s=e.reduce((a,b)=>a+(b.boost?100:1),0);swap(...pair);return s};avail.sort((a,b)=>rank(b)-rank(a));hintCells=new Set(avail[0]);say('Подсветил две клетки: поменяй их местами.')}else{repairNoMoves();say('Нет доступных ходов: поле перемешано.')}}draw();}
 function pointTile(x,y){let el=document.elementFromPoint(x,y)?.closest('.tile[data-i]');if(!el||!$('board').contains(el))return -1;return Number(el.dataset.i)}
-let start=null,lastPreviewTarget=-1;
-function onStart(e){if(busy||over)return;let tile=e.target.closest('.tile[data-i]');if(!tile)return;let i=Number(tile.dataset.i);start={i,x:e.clientX,y:e.clientY,id:e.pointerId};lastPreviewTarget=-1;try{$('board').setPointerCapture(e.pointerId)}catch(_){};if(e.pointerType==='touch')e.preventDefault()}
+// Gesture model: a 12px directional movement, even within the starting cell, is a swipe.
+// Only one neighbor is attempted. Nonmatching swaps bounce back and cost zero moves.
+const SWIPE_THRESHOLD=12;
+let start=null,lastPreviewTarget=-1,gestureLocked=false;
+function swipeNeighbor(i,dx,dy){
+ if(Math.max(Math.abs(dx),Math.abs(dy))<SWIPE_THRESHOLD)return -1;
+ let [x,y]=coord(i);
+ if(Math.abs(dx)>=Math.abs(dy))x+=dx>0?1:-1;
+ else y+=dy>0?1:-1;
+ return valid(x,y)?index(x,y):-1;
+}
+function gestureTile(i){return $('board').querySelector(`.tile[data-i="${i}"]`)}
+function clearGesture(){
+ $('board').querySelectorAll('.gesture-src,.gesture-dst').forEach(el=>{
+  el.style.transform='';el.classList.remove('gesture-src','gesture-dst');
+ });
+}
+function previewSwipe(s,dx,dy){
+ const a=s.i,b=swipeNeighbor(a,dx,dy);
+ if(s.neighbor!==b){clearGesture();s.neighbor=b;}
+ if(!TYPES.has(board[a]))return;
+ const src=gestureTile(a);if(!src)return;
+ if(b<0||!TYPES.has(board[b])){
+  const limited=Math.min(8,Math.hypot(dx,dy)/2);
+  const h=Math.abs(dx)>=Math.abs(dy),sign=(h?dx:dy)>=0?1:-1;
+  src.classList.add('gesture-src');src.style.transform=`translate(${h?limited*sign:0}px,${h?0:limited*sign}px)`;
+  return;
+ }
+ const dst=gestureTile(b);if(!dst)return;
+ const [ax,ay]=coord(a),[bx,by]=coord(b),step=src.getBoundingClientRect().width+3;
+ const dist=Math.abs(bx-ax)?Math.abs(dx):Math.abs(dy);
+ const progress=Math.max(.13,Math.min(.72,(dist-SWIPE_THRESHOLD)/(step-SWIPE_THRESHOLD)));
+ src.classList.add('gesture-src');dst.classList.add('gesture-dst');
+ src.style.transform=`translate(${(bx-ax)*step*progress}px,${(by-ay)*step*progress}px)`;
+ dst.style.transform=`translate(${(ax-bx)*step*progress}px,${(ay-by)*step*progress}px)`;
+}
+function slideAnimation(el, x, y, success, opposite=false){
+ if(!el||typeof el.animate!=='function')return Promise.resolve();
+ const p0='translate(0px,0px)',p1=`translate(${x}px,${y}px)`;
+ const frames=success?[{transform:p0},{transform:p1}]:[{transform:p0},{transform:`translate(${x*.62}px,${y*.62}px)`,offset:.42},{transform:p0}];
+ const anim=el.animate(frames,{duration:success?125:200,easing:success?'cubic-bezier(.25,.9,.25,1)':'cubic-bezier(.33,0,.25,1)'});
+ return anim.finished.catch(()=>{});
+}
+async function trySwipe(a,b){
+ if(gestureLocked||busy||over)return;
+ gestureLocked=true;
+ const src=gestureTile(a),dst=b>=0?gestureTile(b):null;
+ const [ax,ay]=coord(a);
+ const [bx,by]=b>=0?coord(b):[ax,ay];
+ const cell=(parseFloat(getComputedStyle($('board')).getPropertyValue('--size'))||39)+3;
+ const tx=b>=0?(bx-ax)*cell:0,ty=b>=0?(by-ay)*cell:0;
+ const adjacent=b>=0&&man(a,b)===1;
+ const swappable=adjacent&&TYPES.has(board[a])&&TYPES.has(board[b]);
+ const match=swappable&&matchForSwap(a,b);
+ if(swappable){
+  await Promise.all([slideAnimation(src,tx,ty,match),slideAnimation(dst,-tx,-ty,match)]);
+ }else{
+  await slideAnimation(src,tx||9,ty, false);
+ }
+ gestureLocked=false;
+ if(match){void doSwap(a,b);return}
+ say(swappable?'Нет совпадения — фишки вернулись, ход сохранён.':'Сюда нельзя сдвинуть фишку. Ход сохранён.');
+}
+function onStart(e){
+ if(busy||over||gestureLocked||start)return;
+ let tile=e.target.closest('.tile[data-i]');if(!tile)return;
+ let i=Number(tile.dataset.i);
+ start={i,x:e.clientX,y:e.clientY,id:e.pointerId,dragged:false,neighbor:-1};
+ lastPreviewTarget=-1;
+ try{$('board').setPointerCapture(e.pointerId)}catch(_){}
+ if(e.pointerType==='touch')e.preventDefault();
+}
 function onMove(e){
  if(!start||start.id!==e.pointerId||busy)return;
- let power=POWERS.has(board[start.i])?start.i:boost;
+ let dx=e.clientX-start.x,dy=e.clientY-start.y;
+ if(Math.max(Math.abs(dx),Math.abs(dy))>=SWIPE_THRESHOLD)start.dragged=true;
+ const origin=start.i;
+ if(TYPES.has(board[origin])){
+  if(start.dragged)previewSwipe(start,dx,dy);
+  return;
+ }
+ const power=POWERS.has(board[origin])?origin:boost;
  if(power<0)return;
  let target=pointTile(e.clientX,e.clientY);
  if(lastPreviewTarget===target)return;
  lastPreviewTarget=target;
- highlight=ENEMIES.has(board[target])?previewBoost(power,target):[];
+ highlight=target>=0&&ENEMIES.has(board[target])?previewBoost(power,target):[];
  draw();
 }
-function onEnd(e){if(!start||start.id!==e.pointerId)return;let st=start;start=null;let b=pointTile(e.clientX,e.clientY),dx=e.clientX-st.x,dy=e.clientY-st.y;if(b<0&&Math.hypot(dx,dy)>17){let [x,y]=coord(st.i);let delta=Math.abs(dx)>Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)];if(valid(x+delta[0],y+delta[1]))b=index(x+delta[0],y+delta[1])}
- let a=st.i;if(b<0)return;
- if(boost>=0){if(ENEMIES.has(board[b])){void activateBoost(boost,b);return}if(POWERS.has(board[b])){boost=b;highlight=[];draw();return}if(b===boost){boost=-1;highlight=[];draw();return}say('Выбери красную цель для усиления.');return}
- if(POWERS.has(board[a])&&ENEMIES.has(board[b])){void activateBoost(a,b);return}
- if(a!==b&&man(a,b)===1&&TYPES.has(board[a])&&TYPES.has(board[b])){void doSwap(a,b);return}
+function onEnd(e){
+ if(!start||start.id!==e.pointerId)return;
+ const st=start;start=null;
+ let dx=e.clientX-st.x,dy=e.clientY-st.y;
+ const moved=st.dragged||Math.max(Math.abs(dx),Math.abs(dy))>=SWIPE_THRESHOLD;
+ clearGesture();
+ let a=st.i;
+ if(TYPES.has(board[a])&&moved){
+  const b=swipeNeighbor(a,dx,dy);
+  selected=-1;boost=-1;hintCells.clear();
+  void trySwipe(a,b);
+  return;
+ }
+ let b=pointTile(e.clientX,e.clientY);
+ if(POWERS.has(board[a])&&moved){
+   if(b>=0&&ENEMIES.has(board[b])){void activateBoost(a,b);return}
+   if(b>=0&&POWERS.has(board[b])){boost=b;highlight=[];draw();return}
+   boost=a;highlight=[];say('Перенеси усиление на красного или коснись красной цели.');draw();return;
+ }
+ if(b<0)return;
+ if(boost>=0){
+  if(ENEMIES.has(board[b])){void activateBoost(boost,b);return}
+  if(POWERS.has(board[b])){boost=b;highlight=[];draw();return}
+  if(b===boost){boost=-1;highlight=[];draw();return}
+  say('Выбери красную цель для усиления.');return;
+ }
  if(POWERS.has(board[b])){boost=b;selected=-1;highlight=[];say(`${names[board[b]]}: теперь нажми или перетащи на выбранный Слух.`);draw();return}
- if(selected>=0&&selected!==b&&man(selected,b)===1&&TYPES.has(board[selected])&&TYPES.has(board[b])){let from=selected;selected=-1;void doSwap(from,b);return}
- if(TYPES.has(board[b])){selected=selected===b?-1:b;boost=-1;hintCells.clear();draw();say('Выбери соседнюю цветную фишку или проведи свайпом.');return}
- if(ENEMIES.has(board[b])){let g=groupR().find(s=>s.includes(b));let groupText=g?redStage(g.length).name:'одиночный';say(board[b]==='B'?`Источник: осталось воздействий ${hp[b]||1}.`:`Слух · группа: ${groupText.toLowerCase()}.`);selected=-1;draw();return}
+ // Tap-to-tap remains an accessibility fallback; touch gesture is the primary move.
+ if(selected>=0&&selected!==b&&man(selected,b)===1&&TYPES.has(board[selected])&&TYPES.has(board[b])){
+  let from=selected;selected=-1;void trySwipe(from,b);return;
+ }
+ if(TYPES.has(board[b])){
+  selected=selected===b?-1:b;boost=-1;hintCells.clear();draw();
+  say('Сдвинь фишку коротким свайпом вверх, вниз, влево или вправо.');return;
+ }
+ if(ENEMIES.has(board[b])){
+  let g=groupR().find(s=>s.includes(b));let groupText=g?redStage(g.length).name:'одиночный';
+  say(board[b]==='B'?`Источник: осталось воздействий ${hp[b]||1}.`:`Слух · группа: ${groupText.toLowerCase()}.`);selected=-1;draw();return;
+ }
  if(board[b]==='N'){say('Житель пока не распространяет слух. ⚠ означает угрозу заражения на следующий ход.');selected=-1;draw()}
 }
-$('board').addEventListener('pointerdown',onStart,{passive:false});$('board').addEventListener('pointermove',onMove);$('board').addEventListener('pointerup',onEnd);$('board').addEventListener('pointercancel',()=>{start=null});$('board').addEventListener('contextmenu',e=>e.preventDefault());
-$('levelButtons').addEventListener('click',e=>{let b=e.target.closest('[data-lvl]');if(b)setStage(Number(b.dataset.lvl))});$('hintBtn').addEventListener('click',showHint);$('undoBtn').addEventListener('click',restore);$('resetBtn').addEventListener('click',()=>setStage(stage));$('modalReplay').addEventListener('click',()=>setStage(stage));$('modalNext').addEventListener('click',()=>{let n=(stage+1)%LEVELS.length;setStage($('modalTitle').textContent==='Вброс остановлен!'?n:stage);});$('helpTop').addEventListener('click',()=>say('Свайп по соседним цветным. 3 в линию — очистка. 4 Факта — Досье. 4 Лидера квадратом — Эффект. 5 СМИ — Прямой эфир. Выбери усиление и красную цель.'));
+$('board').addEventListener('pointerdown',onStart,{passive:false});
+$('board').addEventListener('pointermove',onMove,{passive:false});
+$('board').addEventListener('pointerup',onEnd);
+$('board').addEventListener('pointercancel',()=>{start=null;clearGesture();highlight=[];draw()});
+$('board').addEventListener('lostpointercapture',()=>{if(start){start=null;clearGesture()}});
+$('board').addEventListener('contextmenu',e=>e.preventDefault());
+$('levelButtons').addEventListener('click',e=>{let b=e.target.closest('[data-lvl]');if(b)setStage(Number(b.dataset.lvl))});$('hintBtn').addEventListener('click',showHint);$('undoBtn').addEventListener('click',restore);$('resetBtn').addEventListener('click',()=>setStage(stage));$('modalReplay').addEventListener('click',()=>setStage(stage));$('modalNext').addEventListener('click',()=>{let n=(stage+1)%LEVELS.length;setStage($('modalTitle').textContent==='Вброс остановлен!'?n:stage);});$('helpTop').addEventListener('click',()=>say('Короткий свайп в любом направлении; без совпадения фишка вернётся. 3 в линию — очистка. 4 Факта — Досье. 4 Лидера квадратом — Эффект. 5 СМИ — Прямой эфир. Выбери усиление и красную цель.'));
 window.addEventListener('resize',resizeBoard);window.addEventListener('orientationchange',()=>setTimeout(resizeBoard,100));
 // Diagnostics: useful for automated consistency checks, not part of the game UI.
 window.__vbros={state:()=>({stage,board:board.slice(),moves,turn,pending:pending.map(o=>({...o})),hp:{...hp},score,over,seed}),findMatches,legalMoves,doSwap,activateBoost,setStage,groupR,previewBoost,repairNoMoves};
