@@ -1,396 +1,327 @@
-<!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#eeeae1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ВБРОС 0.9.2">
-<title>ВБРОС 0.9.2 — Чистые фишки</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/><meta name="theme-color" content="#eaece7"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="ВБРОС 0.11"/><title>ВБРОС · 0.11 — Инфоэпидемия</title>
 <style>
-:root{--paper:#edeae2;--cream:#fffdf8;--ink:#233233;--muted:#6f7974;--line:#d4d7ce;--blue:#4a82a3;--green:#5c997b;--gold:#bb963d;--red:#cb5e55;--dark:#292d35;--size:39px;--gap:3px}
-*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:radial-gradient(ellipse at top,#f7f4eb 0,#e8e8e2 78%)}
-button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:disabled{opacity:.4;cursor:not-allowed}
-.app{max-width:1050px;margin:auto;padding:13px 14px 34px}.mast{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.wordmark{font-size:31px;font-weight:950;letter-spacing:-.075em;line-height:1}.wordmark span{color:var(--red)}.version{font-size:10px;letter-spacing:.14em;font-weight:800;color:#658077;margin-left:7px}.caps{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:850;color:var(--muted)}.top-actions{display:flex;gap:5px;align-items:center}.pill{background:var(--cream);border:1px solid var(--line);padding:7px 10px;border-radius:9px;color:var(--ink);font-size:12px;font-weight:850}.pill.dark{background:#25383a;color:#fff;border-color:#25383a}
-.levels{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:9px}.levels::-webkit-scrollbar{display:none}.level{border:1px solid #d5d7cf;border-radius:10px;background:#fffdf9;flex:1;min-width:140px;text-align:left;padding:9px 10px}.level b{font-size:12px;display:block}.level small{font-size:10px;display:block;color:var(--muted);margin-top:3px}.level.on{background:#243538;border-color:#243538;color:#fff}.level.on small{color:#b7c8be}
-.layout{display:grid;grid-template-columns:minmax(0,630px) minmax(235px,1fr);gap:13px;align-items:start}.main,.side{background:linear-gradient(180deg,#fffdf8,#faf8f2);border:1px solid #d9d9d0;border-radius:14px;box-shadow:0 10px 28px #23323308}.main{padding:13px 14px 14px;min-width:0}.side{padding:16px}
-.intro{display:flex;justify-content:space-between;align-items:start;gap:8px}.intro h1{font-size:23px;letter-spacing:-.045em;line-height:1.08;margin:5px 0 0}.tag{white-space:nowrap;border:1px solid #e9b5a6;color:#a84b41;background:#f9e5dc;border-radius:99px;padding:5px 7px;font-size:10px;font-weight:900}.story{border-left:4px solid var(--red);background:#f0eae1;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:850;margin:10px 0 9px}
-.city{height:70px;position:relative;overflow:hidden;border-radius:9px;border:1px solid #dcded5;background:linear-gradient(180deg,#d8e7e2 0%,#eee6d8 100%);padding:9px 12px}.city svg{position:absolute;inset:0;width:100%;height:100%;opacity:.65}.citytext{position:relative;z-index:1;font-size:12px;max-width:73%;font-weight:850}.citytext strong{font-size:17px;display:block;margin-top:3px}.city-bar{position:absolute;bottom:0;left:0;height:5px;width:30%;background:var(--red);transition:width .25s}.city.win .city-bar{background:var(--green)}
-.scoreboard{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:10px 0}.metric{border-radius:9px;padding:7px 9px;background:#f0ede5}.metric small{display:block;font-size:10px;color:var(--muted);font-weight:750}.metric strong{font-weight:930;font-size:23px;line-height:1.15;font-variant-numeric:tabular-nums}.metric:first-child strong{color:#bd554b}.metric:last-child strong{color:var(--blue)}
-.threat{font-size:11px;display:flex;align-items:center;gap:7px;min-height:33px;padding:7px 9px;margin:0 0 7px;border-radius:8px;font-weight:850;background:#f8e4d6;color:#954a39}.threat.safe{background:#e9f2e9;color:#3c705b}.dot{background:var(--red);width:8px;height:8px;border-radius:50%;flex:none}.safe .dot{background:var(--green)}
-.boardwrap{position:relative;border-radius:13px;background:linear-gradient(165deg,#f3f1e9,#e5e5da);border:1px solid #e3e3d8;padding:11px 6px 13px;display:flex;align-items:center;justify-content:center;min-height:300px;isolation:isolate}.boardwrap:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.15;background:repeating-linear-gradient(145deg,transparent 0 24px,#7e9b9c 25px 26px,transparent 27px 76px)}
-.board{--width:8;display:grid;grid-template-columns:repeat(var(--width),var(--size));grid-auto-rows:var(--size);gap:var(--gap);position:relative;touch-action:none;user-select:none;-webkit-user-select:none;isolation:isolate}.tile{width:var(--size);height:var(--size);border-radius:8px;background:#dedbd1;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;color:#fff;border:1px solid #ffffff99;box-shadow:0 3px 0 #3333330c,inset 0 1px 0 #fff2;transition:transform .12s,filter .12s,box-shadow .12s;overflow:hidden}.tile.off{visibility:hidden}.tile.empty{background:#d7d6cd;border-style:dashed}.tile.F{background:linear-gradient(160deg,#71a7c0,#417a9d)}.tile.L{background:linear-gradient(160deg,#80b59a,#559078)}.tile.M{background:linear-gradient(160deg,#d9b767,#b78d3d)}.tile.R{background:linear-gradient(160deg,#df8174,#c35b52)}.tile.B{background:linear-gradient(160deg,#454044,#25292e);border:2px solid #d2ae70;box-shadow:inset 0 0 0 2px #34343b,0 3px 0 #24232221}.tile.N{background:linear-gradient(160deg,#d6dad6,#bcc6c1);color:#65756c}.tile.DF{background:linear-gradient(160deg,#427393,#204b65);border:2px solid #ffe3a0}.tile.DL{background:linear-gradient(160deg,#397e69,#205b4b);border:2px solid #ffe3a0}.tile.DM{background:linear-gradient(160deg,#c29739,#916b21);border:2px solid #ffe3a0}
-.tile svg{width:57%;height:57%;max-height:25px;min-height:10px;pointer-events:none;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.tile label{font-size:clamp(6px,calc(var(--size)*.18),8px);font-weight:920;letter-spacing:-.01em;line-height:1;pointer-events:none}.tile.N label{font-size:clamp(5px,calc(var(--size)*.15),7px)}.tile.B label,.tile.DM label,.tile.DL label{font-size:clamp(5px,calc(var(--size)*.15),7px)}.tile.B .hp{position:absolute;top:0;right:2px;color:#ffd587;font-size:10px;font-weight:1000}.tile .badge{position:absolute;top:0;left:1px;font-size:9px;font-weight:1000;padding:1px 3px;color:white;background:#a13736;border-radius:3px;line-height:1.1}.tile.warn{outline:3px solid #e99726;outline-offset:-3px;animation:warnGlow .85s ease-in-out infinite alternate}.tile.warn::after{content:'!';color:#a44d2c;position:absolute;top:0;right:3px;font-weight:1000;font-size:13px}.tile.selected{outline:3px solid #264d67;outline-offset:1px;transform:scale(1.07);z-index:10}.tile.reachable{outline:3px solid #ffe29a;outline-offset:-3px;filter:brightness(1.13)}.tile.damage{outline:3px solid #fff6bc;outline-offset:-3px;box-shadow:0 0 0 2px #c48d23}.tile.suggest{outline:3px solid #2b8d6a;outline-offset:-2px}.tile.flash{animation:flash 240ms ease-out}.tile.justBorn{animation:fallin 330ms cubic-bezier(.14,.6,.22,1) both}
-@keyframes warnGlow{to{filter:brightness(1.2)}}@keyframes fallin{from{opacity:.1;transform:translateY(-22px) scale(.92)}to{opacity:1;transform:none}}@keyframes flash{50%{transform:scale(1.08);filter:brightness(1.25)}}
-.tipline{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);margin-top:8px;padding-top:9px;font-size:11px;color:#61716a}.tipline strong{color:#2a705b}.controls{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.controls button{flex:1;border:1px solid var(--line);border-radius:9px;padding:9px 8px;background:#f5f4ee;font-size:11px;font-weight:850;min-height:38px}.controls button.primary{background:#273b3c;color:#fff;border-color:#273b3c}.notice{min-height:44px;padding:10px 12px;border-radius:9px;margin-top:10px;background:#e9f2eb;color:#376554;font-size:12px;font-weight:750}.notice.bad{background:#f9e8df;color:#a45143}
-.side h2{font-size:15px;margin:0 0 8px}.side h3{font-size:12px;margin:17px 0 7px}.side p{font-size:12px;line-height:1.5;color:#56645c;margin:6px 0}.side hr{height:1px;border:0;background:var(--line);margin:14px 0}.rule{display:flex;gap:9px;align-items:center;margin:10px 0}.ruleicon{width:40px;height:40px;flex:none;border-radius:9px;display:grid;place-items:center;color:white;font-weight:1000}.rule b{font-size:12px}.rule small{display:block;color:#687770;line-height:1.4;font-size:11px}.legend{display:grid;grid-template-columns:1fr 1fr;gap:7px}.leg{font-size:11px;display:flex;align-items:center;gap:7px}.dotcol{width:15px;height:15px;border-radius:4px;display:inline-block}.helper{padding:10px;border:1px solid #d2ded5;background:#edf4ee;border-radius:10px;font-size:11px;line-height:1.5}.warningbox{padding:10px;border:1px solid #e2d1b0;background:#fbf3e3;border-radius:9px;font-size:11px;line-height:1.5;margin-top:12px}
-.overlay{position:fixed;inset:0;z-index:1000;background:#13221fd9;display:none;align-items:center;justify-content:center;padding:16px}.overlay.visible{display:flex}.modal{background:#fffcf5;max-width:430px;width:100%;border-radius:17px;padding:25px 22px;box-shadow:0 24px 70px #0005}.modal .emblem{font-size:39px;margin-bottom:8px}.modal h2{font-size:24px;line-height:1.1;margin:0 0 8px}.modal p{font-size:13px;line-height:1.55;color:#5a6862}.modal .actions{display:flex;gap:8px;margin-top:18px}.modal button{flex:1;min-height:42px;border-radius:9px;border:1px solid #bfcac4;background:#edf2ed;font-weight:850}.modal button.primary{background:#243b38;color:white;border-color:#243b38}
-@media(max-width:770px){.app{padding:9px 8px 25px}.layout{grid-template-columns:1fr}.side{margin-top:1px}.main{padding:8px 9px}.intro h1{font-size:20px}.wordmark{font-size:27px}.version{font-size:9px}.levels{gap:5px}.level{min-width:125px;padding:6px 8px}.story{margin:7px 0;font-size:12px}.city{height:51px}.citytext strong{font-size:15px}.citytext{font-size:10px}.scoreboard{margin:6px 0}.metric{padding:6px 9px}.metric strong{font-size:21px}.threat{min-height:30px;margin-bottom:5px}.boardwrap{padding:5px 2px 8px}.tile{border-radius:7px}.notice{margin-top:7px;padding:8px 10px;min-height:35px}.controls{margin-top:7px}.controls button{min-height:36px}.side{padding:12px}}
-@media(max-height:740px) and (max-width:770px){.city{height:46px}.story{padding:7px}.metric strong{font-size:19px}.boardwrap{padding:5px 2px 6px}.controls{margin-top:4px}.notice{margin-top:4px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
-/* 0.9.1 — visual comparison skin: no words on tiles, compact pictograms. */
-.tile{justify-content:center;gap:0;padding:0}
-.tile svg{width:44%;height:44%;max-height:19px;min-height:9px;stroke-width:2.1;flex:none}
-.tile.B svg{width:48%;height:48%;stroke-width:1.9}
-.tile.N svg{width:40%;height:40%;stroke-width:2.05}
-.tile.DF svg,.tile.DL svg,.tile.DM svg{width:50%;height:50%;max-height:22px;stroke-width:2.2}
-.tile label{display:none!important}
-.tile .hp{right:2px;top:0;font-size:10px}
-.tile .badge{top:1px;left:1px;font-size:9px}
-@media(max-width:770px){.tile svg{width:43%;height:43%;max-height:19px}.tile.DF svg,.tile.DL svg,.tile.DM svg{width:49%;height:49%}}
-
-/* V0.9.2: natural short directional swipe on touch and mouse */
-.board .tile{will-change:transform;}
-.board .tile.gesture-src,.board .tile.gesture-dst{z-index:12;transition:none;pointer-events:none;}
-.board .tile.gesture-src{outline:2px solid #fff9;outline-offset:-2px;filter:brightness(1.06);}
-.board .tile.gesture-dst{z-index:11;filter:brightness(.98);}
-@media(prefers-reduced-motion:reduce){.board .tile{transition:none!important;animation:none!important}}
-</style>
-</head>
-<body>
-<div class="app">
- <header class="mast"><div><span class="wordmark">ВБР<span>О</span>С</span><span class="version">0.9.2 · СВАЙП</span></div><div class="top-actions"><span class="caps">CIVIC PRINT</span><button class="pill" id="helpTop">?</button></div></header>
- <div class="levels" id="levelButtons"></div>
- <div class="layout"><main class="main">
-  <div class="intro"><div><div class="caps" id="levelTag">СТАМБУЛ · ЭПИЗОД 01</div><h1 id="district">Фатих</h1></div><span class="tag" id="difficulty">ОБУЧЕНИЕ</span></div>
-  <div class="story" id="rumorHeadline">«Мосты закрыты!»</div>
-  <div class="city" id="cityScene"><svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMax slice"><g fill="#668782" opacity=".18"><path d="M0 90V55h40V40h30v50h22V30h45v60h18V48h38v42h21V15h33v75h26V50h36v40h18V30h34v60h19V60h30v30h21V36h46v54h24V45h39v45h22V64h37v26Z"/></g><path d="M0 85 Q130 55 260 83 T600 70" fill="none" stroke="#9bafaa" stroke-width="2" opacity=".45"/><path d="M40 88h530" stroke="#75928d" stroke-width="2" opacity=".5"/></svg><div class="citytext"><span id="cityMood">СИТУАЦИЯ В РАЙОНЕ</span><strong id="cityOutcome">Слух набирает охват</strong></div><div class="city-bar" id="cityBar"></div></div>
-  <div class="scoreboard"><div class="metric"><small>СЛУХОВ</small><strong id="redCount">0</strong></div><div class="metric"><small>ХОДОВ</small><strong id="moveCount">0</strong></div><div class="metric"><small>ЖИТЕЛЕЙ</small><strong id="neutralCount">0</strong></div></div>
-  <div class="threat safe" id="threat"><span class="dot"></span><span id="threatText">Всё спокойно</span></div>
-  <div class="boardwrap" id="boardWrap"><div class="board" id="board" aria-label="Игровое поле. Коротко сдвинь фишку пальцем влево, вправо, вверх или вниз. Неудачный обмен отменится."></div></div>
-  <div class="tipline"><span id="turnInfo">Короткий свайп по фишке в любую сторону</span><strong id="scoreInfo">0 ОЧКОВ</strong></div>
-  <div class="controls"><button class="primary" id="hintBtn">✧ Подсказка</button><button id="undoBtn">↶ Отмена</button><button id="resetBtn">↻ Заново</button></div>
-  <div class="notice" id="notice" aria-live="polite">Соедини три одинаковые фишки. Большие комбинации создают усиления.</div>
- </main><aside class="side">
-  <h2>Как играть в 0.9.2</h2><p>Поле заполнено. <b>Проведи по фишке вверх, вниз, влево или вправо</b>, чтобы собрать три или больше в линию. После совпадения новые фишки падают сверху.</p>
-  <div class="rule"><div class="ruleicon" style="background:#4a82a3">4</div><div><b>4 Факта в линию → Досье</b><small>Точное попадание по выбранному Слуху</small></div></div>
-  <div class="rule"><div class="ruleicon" style="background:#5c997b">2×2</div><div><b>4 Лидера квадратом → Эффект лидера</b><small>Переубеждение в радиусе двух клеток</small></div></div>
-  <div class="rule"><div class="ruleicon" style="background:#bb963d">5</div><div><b>5 СМИ в линию → Прямой эфир</b><small>До шести связанных распространителей</small></div></div>
-  <div class="helper">Три одинаковых в линию просто очищают клетки. Если совпадение касается Слуха, оно также устраняет <b>одного</b> соседнего распространителя. Большое усиление остаётся на поле: <b>выбери его, затем выбери красную цель</b>.</div>
-  <hr><h3>Фишки</h3><div class="legend"><div class="leg"><i class="dotcol" style="background:#4a82a3"></i>Факт</div><div class="leg"><i class="dotcol" style="background:#5c997b"></i>Лидер</div><div class="leg"><i class="dotcol" style="background:#bb963d"></i>СМИ</div><div class="leg"><i class="dotcol" style="background:#cb5e55"></i>Слух</div><div class="leg"><i class="dotcol" style="background:#292d35;border:2px solid #d2ae70"></i>Источник</div><div class="leg"><i class="dotcol" style="background:#c2cac5"></i>Житель</div></div>
-  <h3>Слухи объединяются</h3><p><b>2 рядом → Шёпот</b> (угрожает одному). <b>3 рядом → Эхо</b> (двум). <b>4 → Сеть</b> (дальше). <b>5+ → Паника</b> (массовая волна).</p><p>Новые Слухи появляются только у существующих Жителей. Предупреждение видно за ход до заражения. Разорви красную группу, чтобы ослабить её.</p>
-  <div class="warningbox"><b>В 0.9.2 проверяем быстрое управление:</b> короткий свайп по цветной фишке меняет её с соседней; если совпадения нет, обмен отменяется и ход сохраняется. Значение цветов — в легенде выше. <b>В этой версии проверяем новое ядро.</b> Нет падающих пар из старого демо, смешанных сочетаний «Факт + Лидер» и покупок. Следующий шаг — баланс сложности и оценка удовольствия от совпадений.</div>
- </aside></div>
-</div>
-<div class="overlay" id="overlay"><div class="modal"><div class="emblem" id="modalIcon">✦</div><h2 id="modalTitle">Уровень пройден</h2><p id="modalText"></p><div class="actions"><button id="modalReplay">Повторить</button><button class="primary" id="modalNext">Следующий инцидент</button></div></div></div>
+:root{--bg:#eaece7;--paper:#fffef8;--ink:#233330;--muted:#64746e;--line:#d7ddd7;--red:#c95d55;--green:#54a180;--blue:#538eb1;--gold:#c9a14e;--shadow:0 10px 38px #16262315}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:radial-gradient(circle at 50% -20%,#fffef7,#e6eae5 63%);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.4;cursor:not-allowed}button:focus-visible{outline:3px solid #2e798c;outline-offset:2px}
+.top{max-width:1050px;margin:auto;padding:15px 16px 9px;display:flex;justify-content:space-between;align-items:center;gap:8px}.brand{font-size:31px;letter-spacing:-.08em;font-weight:950;line-height:1}.brand span{color:#c66354}.small{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#718079;font-weight:800}.topright{display:flex;gap:7px;align-items:center}.btn{border:1px solid #cbd3cc;border-radius:11px;padding:10px 13px;background:#fffdf8;color:#233b32;font-size:12px;font-weight:800;box-shadow:0 2px 1px #00000006}.btn.dark{background:#244c46;color:#fff;border-color:#244c46}.btn.red{background:#f8e6e1;color:#a24a41}.btn.min{padding:8px 10px}.btn:active{transform:translateY(1px)}
+.wrap{max-width:1050px;margin:auto;padding:0 13px 28px}.panel{background:var(--paper);border:1px solid #d8ded6;border-radius:16px;box-shadow:var(--shadow)}
+.scene{display:none}.scene.active{display:block}
+.hero{padding:22px 24px;margin:4px 0 12px;background:#254c46;color:white;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;border:38px solid #ffffff0c;border-radius:100%;width:260px;height:260px;right:-90px;top:-130px}.hero h1{font-size:clamp(25px,4vw,39px);line-height:1.06;letter-spacing:-.06em;margin:9px 0}.hero p{max-width:580px;font-size:13px;line-height:1.55;color:#e2ede7;margin:0}
+.map-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr);gap:12px}.map-panel{min-height:400px;padding:14px;overflow:hidden}.map-heading{font-weight:900;font-size:14px;display:flex;justify-content:space-between;margin-bottom:8px}.map-visual{min-height:350px;position:relative;border-radius:13px;background:linear-gradient(170deg,#e1e9e1,#cfdad4);overflow:hidden}.map-visual svg{width:100%;height:355px;display:block}.map-pin{cursor:pointer;transition:transform .15s;transform-origin:center;outline:none}.map-pin:hover{filter:brightness(1.08)}
+.district-list{padding:13px;display:flex;flex-direction:column;gap:7px}.district-head{font-size:14px;font-weight:900;padding:3px 4px 8px}.district{display:flex;text-align:left;gap:12px;align-items:center;width:100%;border:1px solid #d9dfd9;background:#fbfcf8;border-radius:11px;padding:10px 12px}.district:hover{border-color:#879c93;background:#f2f6ee}.n{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#e9eee5;border-radius:9px;color:#60736e;font-weight:900;font-size:12px}.district strong{font-size:13px;display:block}.district small{color:#718078;font-size:11px;display:block;line-height:1.4;margin-top:2px}.chip{margin-left:auto;font-size:10px;font-weight:900;padding:5px 7px;border-radius:8px;white-space:nowrap;color:#915246;background:#f9ebe5}
+.game-layout{display:grid;grid-template-columns:minmax(0,615px) minmax(290px,1fr);gap:13px;align-items:start}.game-main{padding:13px 14px 17px}.game-aside{padding:15px 16px}.game-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.game-heading h1{font-size:24px;line-height:1.1;margin:5px 0 9px;letter-spacing:-.05em}.headline{background:#f5efe6;border-left:3px solid #c95d55;border-radius:7px;padding:9px 10px;font-size:12px;font-weight:750;line-height:1.35;margin:5px 0 9px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.metric{background:#eef0e9;border-radius:9px;padding:7px 8px}.metric label{display:block;color:#72817b;font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:850}.metric strong{font-size:19px;letter-spacing:-.03em}.hazard{margin:9px 0 7px;border-radius:9px;padding:8px 9px;background:#f9e9e4;color:#985047;font-size:11px;font-weight:750;min-height:32px}.hazard.safe{background:#e9f1e9;color:#47836e}
+.board-container{background:linear-gradient(135deg,#e9e8dc,#dfe6dc);border:1px solid #d0d9cf;border-radius:13px;padding:9px 6px 12px;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden;min-height:340px}
+#board{display:block;width:min(100%,430px);aspect-ratio:1;max-width:430px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}#board:active{cursor:grabbing}
+.actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:9px 0}.actions .btn{flex:1;white-space:nowrap}.status{margin-top:6px;border-radius:9px;background:#eef3ed;color:#366f5a;padding:10px 11px;font-size:12px;line-height:1.4;font-weight:750;min-height:40px}.status.bad{background:#f9ece6;color:#ae5047}
+.scoreline{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #dfe4db;padding-top:8px;margin-top:8px;color:#718078;font-size:11px;font-weight:750}.scoreline b{color:#325b50}
+.game-aside h2{font-size:16px;margin:2px 0 8px}.game-aside h3{font-size:13px;margin:16px 0 8px}.game-aside p{font-size:12px;line-height:1.6;color:#576760;margin:5px 0 9px}.rule{display:flex;align-items:center;gap:9px;border-bottom:1px solid #e7eae4;padding:8px 0}.rule:last-child{border-bottom:0}.power-chip{width:36px;height:36px;border-radius:9px;background:#e4eff0;display:flex;align-items:center;justify-content:center;color:#326b89;flex:none;font-size:17px;font-weight:900}.power-chip.y{background:#fff0c7;color:#936b21}.power-chip.g{background:#e2efe5;color:#3c886b}.rule b{font-size:12px}.rule span{display:block;color:#829087;font-size:11px;margin-top:2px}.legend{display:flex;gap:5px;flex-wrap:wrap}.legend span{font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:6px 7px;border-radius:8px;background:#f0f2ed}.swatch{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--c)}
+hr{border:0;border-top:1px solid #dfe4dc;margin:13px 0}.testbox{border:1px dashed #b9cac0;border-radius:12px;padding:9px;background:#f5f8f3}.testbox summary{font-size:12px;font-weight:900;cursor:pointer}.testbox .row{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 0}.testbox .btn{font-size:10px;padding:8px 7px}.map-home{border:0;background:transparent;padding:0 8px 0 0;font-size:14px;font-weight:900;color:#487666}
+.overlay{position:fixed;z-index:1000;inset:0;display:none;align-items:center;justify-content:center;padding:15px;background:#162621c9;backdrop-filter:blur(5px)}.overlay.visible{display:flex}.modal{background:#fffefa;border:1px solid #fff;border-radius:19px;padding:21px 20px;max-width:430px;width:100%;box-shadow:0 15px 50px #131f1755}.modal .over{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#a96954;font-weight:900}.modal h2{font-size:27px;letter-spacing:-.055em;line-height:1.07;margin:10px 0 12px}.modal p{font-size:13px;line-height:1.55;color:#58675f;margin:8px 0}.modal .modal-actions{display:flex;gap:7px;margin-top:15px}.modal .btn{flex:1}.modal .example{display:flex;gap:9px;align-items:center;background:#f0f3ec;border-radius:11px;padding:13px;margin:11px 0}.modal .example b{font-size:13px}.modal .example small{font-size:11px;color:#60736a}
+@media(max-width:800px){.map-layout,.game-layout{grid-template-columns:1fr}.game-aside{margin-top:0}.hero{padding:15px 17px}.hero h1{font-size:28px}.map-panel{min-height:0}.map-visual{min-height:245px}.map-visual svg{height:260px}}
+@media(max-width:450px){.wrap{padding:0 7px 20px}.top{padding:10px 10px 9px}.brand{font-size:27px}.game-main{padding:10px 9px}.game-heading h1{font-size:22px}.metric{padding:6px}.metric strong{font-size:18px}.board-container{padding:5px 2px 7px;min-height:0}.game-aside{padding:13px}.actions .btn{font-size:11px;padding:9px 6px}.hero p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:0ms!important}}
+</style></head><body>
+<header class="top"><div><div class="brand">ВБР<span>О</span>С</div><div class="small">0.11 · ИНФОЭПИДЕМИЯ</div></div><div class="topright"><button class="btn min" id="helpBtn">? Правила</button><button class="btn min" id="mapBtn">▦ Районы</button></div></header>
+<main class="wrap">
+<section id="sceneMap" class="scene active"><div class="hero panel"><div class="small" style="color:#bed4ca">СТАМБУЛ · МОНИТОРИНГ ИНФОПОЛЯ</div><h1>В городе снова<br>что-то вбросили.</h1><p>Выбирай район, разбирай новый слух и не дай ему заразить город. Каждый повторный запуск раскладывает цветные фишки заново.</p></div>
+<div class="map-layout"><section class="map-panel panel"><div class="map-heading"><span>Карта информационных угроз</span><span class="small">6 ИНЦИДЕНТОВ</span></div><div class="map-visual"><svg viewBox="0 0 560 360" role="img" aria-label="Схематическая карта районов города"><defs><pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" stroke="#bdcfc5" stroke-width=".65" fill="none"/></pattern></defs><rect width="560" height="360" fill="url(#grid)"/><path d="M-30 270Q100 240 162 183T333 167Q410 174 576 71" fill="none" stroke="#afc9d3" stroke-width="76"/><path d="M-30 270Q100 240 162 183T333 167Q410 174 576 71" fill="none" stroke="#d3e5e9" stroke-width="63"/><g fill="none" stroke="#abc4b7" stroke-width="1.5" opacity=".75"><path d="M20 20Q140 78 208 19T411 27"/><path d="M4 99Q149 144 250 70T544 145"/><path d="M24 320Q177 261 293 326T525 255"/><path d="M115 4L167 102 25 164"/><path d="M387 4L448 104 515 205"/></g><g fill="#416d61" font-size="12" font-weight="800"><text x="25" y="36">СТАМБУЛ</text><text x="317" y="333" opacity=".48">БОСФОР</text></g><g id="mapHotspots"></g></svg></div></section><section class="district-list panel"><div class="district-head">Активные случаи <span class="small">ВЫБЕРИ ДЛЯ ИГРЫ</span></div><div id="districtList"></div></section></div></section>
+<section id="sceneGame" class="scene"><div class="game-layout"><section class="game-main panel"><div class="game-heading"><div><div class="small" id="levelKicker">ИНЦИДЕНТ 01</div><h1 id="levelName">Фатих</h1></div><span class="chip" id="levelKind">ОБУЧЕНИЕ</span></div><div class="headline" id="headline">«Мосты закрывают!»</div>
+<div class="metrics"><div class="metric"><label>УГРОЗ</label><strong id="countThreat">0</strong></div><div class="metric"><label>ХОДОВ</label><strong id="countMoves">0</strong></div><div class="metric"><label>ЖИТЕЛЕЙ</label><strong id="countResidents">0</strong></div><div class="metric"><label>ВЛИЯНИЕ</label><strong id="countInfluence">0</strong></div></div><div class="hazard safe" id="hazard">Информационное поле стабильно</div><div class="board-container"><canvas id="board" aria-label="Игровое поле. Проводи пальцем по цветным фишкам, чтобы поменять их с соседними."></canvas></div><div class="scoreline"><span id="turnNote">Собери три одного цвета</span><b id="coinNote">Награда: 0 монет</b></div><div class="actions"><button class="btn" id="hintBtn">✧ Подсказка</button><button class="btn" id="undoBtn">↶ Отмена</button><button class="btn" id="resetBtn">↻ Заново</button><button class="btn dark" id="lawBtn" style="display:none">⚖ Закон · 60</button></div><div class="status" id="status" aria-live="polite">Собери три одинаковые фишки.</div></section>
+<aside class="game-aside panel"><h2>Как играть</h2><p>Цветные квадраты — простые фишки. Свайпни соседние фишки, чтобы собрать три и больше одинаковых. <b>Каждая обычная комбинация рядом со Слухом снимает ему одну жизнь.</b></p>
+<div class="legend"><span><i class="swatch" style="--c:#568fb1"></i>Синий</span><span><i class="swatch" style="--c:#62a585"></i>Зелёный</span><span><i class="swatch" style="--c:#d4a955"></i>Жёлтый</span><span><i class="swatch" style="--c:#d06a5f"></i>Слух</span></div>
+<h3>4 фишки — полезное усиление</h3><div class="rule"><div class="power-chip">✓</div><div><b>Синий → Факт</b><span>Минус 1 жизнь Слуха</span></div></div><div class="rule"><div class="power-chip g">◉</div><div><b>Зелёный → Лидер мнений</b><span>Минус 1 жизнь и защитное влияние</span></div></div><div class="rule"><div class="power-chip y">◖</div><div><b>Жёлтый → СМИ</b><span>Минус 1 жизнь, передача информации</span></div></div>
+<h3>5 фишек — мощное усиление</h3><div class="rule"><div class="power-chip">▤</div><div><b>Синий → Досье</b><span>Устраняет цель и бьёт по линиям</span></div></div><div class="rule"><div class="power-chip g">♟</div><div><b>Зелёный → Группа лидеров</b><span>Устраняет цель и усиливает Защитников</span></div></div><div class="rule"><div class="power-chip y">▶</div><div><b>Жёлтый → Прямой эфир</b><span>Устраняет цель и бьёт по области</span></div></div>
+<hr/><p><b>Для применения</b> коснись усиления, затем красной цели. Для супермикса коснись второго усиления либо соедини их свайпом. Предупреждение красной рамкой означает заражение на следующем успешном ходу.</p>
+<details class="testbox"><summary>🧪 Лаборатория механик</summary><p>Быстро подставляет тестовые состояния, чтобы не ждать редкую комбинацию.</p><div class="row"><button class="btn" data-test="pair">Досье + эфир</button><button class="btn" data-test="leader">Угроза лидеру</button><button class="btn" data-test="media">Угроза СМИ</button><button class="btn" data-test="group">Слуховая сеть</button><button class="btn" data-test="special">Спецобъекты</button><button class="btn" data-test="power:b4">Факт</button><button class="btn" data-test="power:b5">Досье</button><button class="btn" data-test="power:g4">Лидер</button><button class="btn" data-test="power:g5">Группа лидеров</button><button class="btn" data-test="power:y4">СМИ</button><button class="btn" data-test="power:y5">Прямой эфир</button></div></details>
+</aside></div></section></main>
+<div class="overlay" id="modal"><div class="modal"><div class="over" id="modalLabel">НОВАЯ МЕХАНИКА</div><h2 id="modalTitle">Добро пожаловать</h2><div id="modalBody"></div><div class="modal-actions"><button class="btn dark" id="modalOk">Понятно · играть</button></div></div></div>
 <script>
 'use strict';
-const $=id=>document.getElementById(id), TYPES=new Set(['F','L','M']), ENEMIES=new Set(['R','B']), POWERS=new Set(['DF','DL','DM']);
-const names={F:'ФАКТ',L:'ЛИДЕР',M:'СМИ',R:'СЛУХ',B:'ИСТОЧНИК',N:'ЖИТЕЛЬ',DF:'ДОСЬЕ',DL:'ЭФФЕКТ',DM:'ПРЯМОЙ'};
-const symbols={
- F:'<rect x="6" y="3" width="12" height="18" rx="1.5"/><path d="M9 8h6M9 12h6M9 16l2 2 4-4"/>',
- L:'<circle cx="12" cy="7.2" r="3.2"/><path d="M5.5 20v-2.5c0-4 13-4 13 0V20M18 7l2 2 3-3"/>',
- M:'<path d="M7 17V8l10-5v18L7 17Z"/><path d="M7 12H3v3h4M8 17l3 5M19 7c2 2 2 8 0 10"/>',
- R:'<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M12 8v4M12 14h.01"/>',
- B:'<path d="M4 6h16v11H9l-5 4V6Z"/><path d="M12 8l1.4 2.5 2.8.4-2 2 .5 2.8-2.7-1.3-2.7 1.3.5-2.8-2-2 2.8-.4Z"/>',
- N:'<circle cx="12" cy="8" r="3.3"/><path d="M5 21v-2c0-5 14-5 14 0v2"/>',
- DF:'<path d="M5 3h12l3 3v15H5Z"/><path d="M17 3v4h3M9 10h7M9 14h7M10 18l2 2 4-4"/>',
- DL:'<circle cx="9" cy="8" r="2.5"/><circle cx="17" cy="9" r="2.3"/><path d="M3 20c0-7 12-7 12 0M14 19c1-4 7-5 8 0"/>',
- DM:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 6 3-6 3V9ZM7 2h10M7 22h10"/>'};
-const svg=t=>`<svg viewBox="0 0 24 24" aria-hidden="true">${symbols[t]||''}</svg>`;
+const $=id=>document.getElementById(id),SIZE=8,PAD=6,GAP=3,CANVAS_SIZE=420;
+const ctx=$('board').getContext('2d');
+const COLORS={b:['#86b8cf','#4a86ab'],g:['#8ac6a2','#489b7d'],y:['#f4d17a','#bf9441']};
+const POWERS={b4:{name:'Факт',col:'b',tier:4,mark:'✓'},b5:{name:'Досье',col:'b',tier:5,mark:'▤'},g4:{name:'Лидер мнений',col:'g',tier:4,mark:'♟'},g5:{name:'Группа лидеров',col:'g',tier:5,mark:'♟+'},y4:{name:'СМИ',col:'y',tier:4,mark:'◖'},y5:{name:'Прямой эфир',col:'y',tier:5,mark:'LIVE'}};
 const LEVELS=[
- {district:'Фатих',badge:'ОБУЧЕНИЕ',kind:'Лёгкий',title:'«В городе закрыли мосты!»',result:'Мосты работают · слух остановлен',moves:10,seed:98,spawn:false,cap:0,w:8,mask:[' 111111 ','11111111','11111111','11111111','11111111','11111111','11111111','11111111',' 111111 '],r:[[3,3],[6,4],[2,6]],b:[],n:[[4,4],[5,4],[1,5],[3,6],[5,6],[6,6]],preset:'facts'},
- {district:'Кадыкёй',badge:'ОБЫЧНЫЙ',kind:'Обычный',title:'«Городской транспорт отменяют!»',result:'Транспорт ходит по расписанию',moves:15,seed:413,spawn:true,cap:2,w:8,mask:[' 111111 ','11111111','11111111','11111111','11111111','11111111','11111111','11111111',' 111111 '],r:[[2,3],[3,3],[5,5],[6,6],[2,6]],b:[[4,4,1]],n:[[1,3],[1,4],[2,4],[3,4],[5,4],[6,4],[4,5],[4,6],[5,6],[6,5]],preset:'leaders'},
- {district:'Бейоглу',badge:'СЛОЖНЫЙ',kind:'Сложный',title:'«В центре города отключат связь!»',result:'Связь работает · паники нет',moves:15,seed:622,spawn:true,cap:3,w:8,mask:[' 111111 ','11111111','11111111','11111111','11111111','11111111','11111111','11111111',' 111111 '],r:[[2,3],[3,3],[3,4],[4,6],[5,6],[6,5]],b:[[5,4,2]],n:[[1,3],[1,4],[2,4],[4,3],[4,4],[5,3],[6,3],[6,4],[5,5],[3,6],[2,6],[1,6]],preset:null},
- {district:'Ускюдар',badge:'ЭКСПЕРИМЕНТ',kind:'Прямой эфир',title:'«Переправы полностью перекрыты!»',result:'Прямой эфир: переправы открыты',moves:12,seed:880,spawn:true,cap:3,w:8,mask:[' 111111 ','11111111','11111111','11111111','11111111','11111111','11111111','11111111',' 111111 '],r:[[2,4],[2,5],[3,5],[5,5],[6,5]],b:[[5,3,2]],n:[[1,4],[1,5],[1,6],[3,4],[4,4],[4,5],[5,4],[6,4],[6,6]],preset:'media'}
+ {name:'Фатих',label:'ЗНАКОМСТВО',difficulty:'Обучение',title:'«Мосты города внезапно закрыли!»',truth:'Мосты работают в обычном режиме',cred:'Низкая',seed:991,turns:18,red:2,residents:6,boss:0,cap:1,unlock:0,at:[103,96],special:null},
+ {name:'Кадыкёй',label:'РАЗГОН СЛУХА',difficulty:'Лёгкий',title:'«Общественный транспорт отменяют!»',truth:'Маршруты работают; слух опровергнут',cred:'Средняя',seed:1503,turns:17,red:3,residents:9,boss:1,cap:1,unlock:1,at:[398,89],special:'vulnerable'},
+ {name:'Бейоглу',label:'УДАЛЁННЫЙ ВБРОС',difficulty:'Обычный',title:'«В центре полностью отключат связь!»',truth:'Связь работает без ограничений',cred:'Средняя',seed:2421,turns:19,red:3,residents:10,boss:1,cap:2,unlock:2,at:[225,110],special:'fake'},
+ {name:'Ускюдар',label:'КОНСПИРОЛОГИЯ',difficulty:'Сложный',title:'«На переправе скрывают серьёзную аварию!»',truth:'Сообщение не подтверждено; переправа открыта',cred:'Высокая',seed:2727,turns:19,red:3,residents:9,boss:1,cap:2,unlock:3,at:[398,241],special:'theory'},
+ {name:'Бакыркёй',label:'САРАФАННОЕ РАДИО',difficulty:'Сложный',title:'«Весь район останется без воды!»',truth:'Водоснабжение района работает',cred:'Средняя',seed:3589,turns:20,red:4,residents:9,boss:1,cap:3,unlock:4,at:[69,279],special:'grandma'},
+ {name:'Эминёню',label:'ОФИЦИАЛЬНАЯ РЕАКЦИЯ',difficulty:'Эксперимент',title:'«Городские службы прекращают работу!»',truth:'Городские службы работают',cred:'Высокая',seed:4721,turns:21,red:3,residents:10,boss:1,cap:3,unlock:5,at:[293,225],special:'law'}
 ];
-let stage=0,board=[],moves=0,turn=0,seed=1,hp={},pending=[],residentGuard={},score=0,initialRed=0,selected=-1,boost=-1,highlight=[],tipCells=[],busy=false,over=false,undo=null,session=0,spreadingPaused=false,recentBorn=new Set(),lastHit=new Set(),hintCells=new Set(),preventDefaultTouch=false;
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-function rand(){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;seed>>>=0;return seed/4294967296}
-const choose=a=>a[Math.floor(rand()*a.length)];const level=()=>LEVELS[stage];
-function index(x,y){return y*level().w+x}function coord(i){return [i%level().w,Math.floor(i/level().w)]}function valid(x,y){return x>=0&&x<level().w&&y>=0&&y<level().mask.length&&level().mask[y][x]==='1'}
-function active(i){let [x,y]=coord(i);return valid(x,y)}
-function nb(i){let [x,y]=coord(i);return [[x-1,y],[x+1,y],[x,y-1],[x,y+1]].filter(z=>valid(...z)).map(z=>index(...z))}
-const man=(a,b)=>{let [x,y]=coord(a),[u,v]=coord(b);return Math.abs(x-u)+Math.abs(y-v)};
-const allR=()=>board.reduce((a,t,i)=>ENEMIES.has(t)?[...a,i]:a,[]);
-const totalRed=()=>allR().length;
-function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[j],a[i]]=[a[i],a[j]]}return a}
-function groupR(){let visited=new Set(),groups=[];for(let i=0;i<board.length;i++)if(board[i]==='R'&&!visited.has(i)){let stack=[i],g=[];visited.add(i);while(stack.length){let k=stack.pop();g.push(k);for(let n of nb(k))if(board[n]==='R'&&!visited.has(n)){visited.add(n);stack.push(n)}}groups.push(g)}return groups}
-function redStage(n){return n>=5?{name:'ПАНИКА',n:3,radius:2}:n>=4?{name:'СЕТЬ',n:2,radius:2}:n>=3?{name:'ЭХО',n:2,radius:1}:n>=2?{name:'ШЁПОТ',n:1,radius:1}:{name:'ОДИНОЧНЫЙ',n:0,radius:1}}
-function findMatches(arr=board){let entries=[],all=new Set();const w=level().w,h=level().mask.length;
- for(let y=0;y<h;y++){let x=0;while(x<w){let i=index(x,y),t=arr[i];if(!TYPES.has(t)){x++;continue}let xs=[i],z=x+1;while(z<w&&valid(z,y)&&arr[index(z,y)]===t){xs.push(index(z,y));z++}if(xs.length>=3){entries.push({type:'line',t,cells:xs,boost:t==='F'&&xs.length>=4?'DF':t==='M'&&xs.length>=5?'DM':null});xs.forEach(i=>all.add(i))}x=z}}
- for(let x=0;x<w;x++){let y=0;while(y<h){let i=index(x,y),t=arr[i];if(!TYPES.has(t)){y++;continue}let ys=[i],z=y+1;while(z<h&&valid(x,z)&&arr[index(x,z)]===t){ys.push(index(x,z));z++}if(ys.length>=3){entries.push({type:'line',t,cells:ys,boost:t==='F'&&ys.length>=4?'DF':t==='M'&&ys.length>=5?'DM':null});ys.forEach(i=>all.add(i))}y=z}}
- for(let y=0;y<h-1;y++)for(let x=0;x<w-1;x++){if(!valid(x,y)||!valid(x+1,y)||!valid(x,y+1)||!valid(x+1,y+1))continue;let xs=[index(x,y),index(x+1,y),index(x,y+1),index(x+1,y+1)];if(xs.every(i=>arr[i]==='L')){entries.push({type:'square',t:'L',cells:xs,boost:'DL'});xs.forEach(i=>all.add(i))}}
- return{entries,all}}
-function initialFill(){let l=level();board=new Array(l.w*l.mask.length).fill(null);for(let y=0;y<l.mask.length;y++)for(let x=0;x<l.w;x++)if(valid(x,y))board[index(x,y)]='';
- for(let [x,y] of l.r)board[index(x,y)]='R';for(let [x,y,health] of l.b){let k=index(x,y);board[k]='B';hp[k]=health}for(let [x,y] of l.n)board[index(x,y)]='N';
- for(let y=0;y<l.mask.length;y++)for(let x=0;x<l.w;x++)if(valid(x,y)&&board[index(x,y)]===''){
- let options=shuffle(['F','L','M']);let pick=options.find(t=>{
- let left=x>=2&&board[index(x-1,y)]===t&&board[index(x-2,y)]===t;
- let up=y>=2&&board[index(x,y-1)]===t&&board[index(x,y-2)]===t;
- let square=t==='L'&&x>0&&y>0&&board[index(x-1,y)]==='L'&&board[index(x,y-1)]==='L'&&board[index(x-1,y-1)]==='L';
- return!left&&!up&&!square});board[index(x,y)]=pick||options[0];
+const TUTORIALS=[
+ ['Добро пожаловать во «Вброс»','Обычные синие, зелёные и жёлтые квадраты — только цвета. Собирай по три, получай Влияние и наноси по 1 урону каждому соседнему Слуху. У Слухов есть жизни. Четыре цвета одного типа создают усиление, пять — более мощное.'],
+ ['Лидер мнений под угрозой','Лидер мнений и СМИ появляются только после четырёх зелёных или жёлтых фишек. Теперь Слух может нацелиться на готовое усиление. Красный контур — предупреждение. Применяй его сейчас либо рискни сохранить для микса. Заражённый Лидер получает 4 жизни, СМИ — 5.'],
+ ['Фейк и удалённые очаги','Фейк способен предупредить о заражении Жителя даже на другом конце поля. Красная линия показывает источник угрозы. У тебя будет один полноценный ход для реакции.'],
+ ['Теория — защита слуха','Фиолетовая метка «Т» на красной клетке означает, что слух окружён конспирологической теорией. Первое обычное попадание снимает защиту, а не жизнь. Сильное адресное усиление может устранить цель сразу.'],
+ ['Бабушки — быстрое распространение','Бабушки — особый распространитель с усиленной «сарафанной» передачей. Пока он жив, соседние слуховые группы способны угрожать большему числу Жителей. Перекрывай цепочку или устраняй Бабушек.'],
+ ['Закон — ограничение эпидемии','Экспериментальная механика: накопи 60 очков Влияния и активируй «Закон» на два хода. Заражение временно остановится. Проверим, не превращает ли это дополнительное действие игру в слишком простую.']
+];
+const MASK=['01111110','11111111','11111111','11111111','11111111','11111111','11111111','01111110'];
+const playable=(x,y)=>x>=0&&y>=0&&x<8&&y<8&&MASK[y][x]==='1';
+const ind=(x,y)=>y*8+x,xy=i=>[i%8,Math.floor(i/8)],validIndex=i=>i>=0&&i<64&&playable(...xy(i));
+const adj=i=>{let [x,y]=xy(i);return [[x-1,y],[x+1,y],[x,y-1],[x,y+1]].filter(([a,b])=>playable(a,b)).map(([a,b])=>ind(a,b))};
+const man=(a,b)=>{let [x,y]=xy(a),[z,w]=xy(b);return Math.abs(x-z)+Math.abs(y-w)};
+const canMatch=c=>c&&c.t==='c'; const threat=c=>c&&(c.t==='r'||c.t==='boss'||c.t==='elite'||c.t==='fake'||c.t==='grandma');
+const vulnerable=c=>c&&(c.t==='n'||c.t==='p'&&(c.p==='g4'||c.p==='y4'));
+let S={stage:0,map:true,board:Array(64).fill(null),uid:0,replay:0,seed:99,moves:0,turn:0,influence:0,coins:0,score:0,warnings:[],guard:{},freeze:0,win:false,loss:false,busy:false,selected:-1,hover:-1,drag:null,animation:null,previous:null,stun:{},comboCount:0};
+let renderPending=false,raf=0;
+function rand(){S.seed^=S.seed<<13;S.seed^=S.seed>>>17;S.seed^=S.seed<<5;S.seed>>>=0;return S.seed/4294967296}
+function choose(arr){return arr[Math.floor(rand()*arr.length)]}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function make(t,extras={}){return {id:++S.uid,t,...extras}}
+function newColor(color=choose(['b','g','y'])){return make('c',{col:color,born:S.turn})}
+function newEnemy(t='r',opts={}){return make(t,{hp:t==='r'?3:t==='grandma'?4:t==='boss'?4:t==='fake'?3:4,max:t==='r'?3:t==='grandma'?4:t==='boss'?4:t==='fake'?3:4,shield:0,...opts})}
+function chooseCell(allowed,avoid=[]){let arr=[];for(let i=0;i<64;i++)if(validIndex(i)&&allowed(i,S.board[i])&&!avoid.some(k=>man(k,i)<=2))arr.push(i);return arr.length?choose(arr):null}
+function groupRumors(){let seen=new Set(),groups=[];for(let i=0;i<64;i++){if(!threat(S.board[i])||seen.has(i))continue;let group=[],stack=[i];seen.add(i);while(stack.length){let j=stack.pop();group.push(j);for(let k of adj(j))if(threat(S.board[k])&&!seen.has(k)){seen.add(k);stack.push(k)}}groups.push(group)}return groups}
+function findMatches(board=S.board){
+ const runs=[];
+ for(let y=0;y<8;y++){let x=0;while(x<8){let i=ind(x,y),c=board[i];if(!canMatch(c)){x++;continue}let col=c.col,cells=[i],z=x+1;while(z<8&&canMatch(board[ind(z,y)])&&board[ind(z,y)].col===col){cells.push(ind(z,y));z++}if(cells.length>=3)runs.push({col,cells,kind:'line'});x=z}}
+ for(let x=0;x<8;x++){let y=0;while(y<8){let i=ind(x,y),c=board[i];if(!canMatch(c)){y++;continue}let col=c.col,cells=[i],z=y+1;while(z<8&&canMatch(board[ind(x,z)])&&board[ind(x,z)].col===col){cells.push(ind(x,z));z++}if(cells.length>=3)runs.push({col,cells,kind:'line'});y=z}}
+ for(let y=0;y<7;y++)for(let x=0;x<7;x++){let cells=[ind(x,y),ind(x+1,y),ind(x,y+1),ind(x+1,y+1)];if(cells.every(i=>canMatch(board[i]))&&cells.every(i=>board[i].col===board[cells[0]].col))runs.push({col:board[cells[0]].col,cells,kind:'square'})}
+ // Merge overlapping matches of the same color into a single power-up event.
+ let groups=[];for(let run of runs){let found=[];for(let n=0;n<groups.length;n++)if(groups[n].col===run.col&&run.cells.some(i=>groups[n].cells.has(i)))found.push(n);if(!found.length)groups.push({col:run.col,cells:new Set(run.cells),runs:[run]});else{let root=groups[found[0]];run.cells.forEach(i=>root.cells.add(i));root.runs.push(run);for(let k=found.length-1;k>=1;k--){let j=found[k];groups[j].cells.forEach(i=>root.cells.add(i));root.runs.push(...groups[j].runs);groups.splice(j,1)}}}
+ return groups.map(g=>({...g,indices:[...g.cells],size:g.cells.size}));
+}
+function swap(a,b){[S.board[a],S.board[b]]=[S.board[b],S.board[a]]}
+function isLegal(a,b){if(!canMatch(S.board[a])||!canMatch(S.board[b])||man(a,b)!==1||S.board[a].col===S.board[b].col)return false;swap(a,b);let match=findMatches().length>0;swap(a,b);return match}
+function movesAvailable(){let out=[];for(let i=0;i<64;i++)if(canMatch(S.board[i]))for(let n of adj(i))if(n>i&&isLegal(i,n))out.push([i,n]);return out}
+function clearInstantMatches(){for(let retry=0;retry<100;retry++){let ms=findMatches();if(!ms.length)return;let touched=[...new Set(ms.flatMap(m=>m.indices))];for(let idx of touched)if(S.board[idx]?.t==='c')S.board[idx]=newColor(choose(['b','g','y'].filter(c=>c!==S.board[idx].col)))}}
+function rerollBoard(){
+ const cfg=LEVELS[S.stage]; S.uid=0;S.seed=(cfg.seed+S.replay*3889)>>>0||1;S.board=Array(64).fill(null);S.guard={};S.warnings=[];S.stun={};S.freeze=0;
+ for(let y=0;y<8;y++)for(let x=0;x<8;x++)if(playable(x,y)){
+  let options=shuffle(['b','g','y']);let col=options.find(c=>{
+   let left=x>=2&&S.board[ind(x-1,y)]?.col===c&&S.board[ind(x-2,y)]?.col===c;
+   let top=y>=2&&S.board[ind(x,y-1)]?.col===c&&S.board[ind(x,y-2)]?.col===c;
+   let sq=x>0&&S.board[ind(x-1,y)]?.col===c&&S.board[ind(x,y-1)]?.col===c&&S.board[ind(x-1,y-1)]?.col===c;
+   return!left&&!top&&!sq;
+  })||options[0];S.board[ind(x,y)]=newColor(col)
+ }
+ let protectedCells=[];if(cfg.boss){let b=chooseCell((i,c)=>c?.t==='c',protectedCells);if(b!=null){S.board[b]=newEnemy('boss',{hp:3,max:3});protectedCells.push(b)}}
+ if(cfg.special==='fake'){let f=chooseCell((i,c)=>c?.t==='c',protectedCells);if(f!=null){S.board[f]=newEnemy('fake');protectedCells.push(f)}}
+ if(cfg.special==='grandma'){let g=chooseCell((i,c)=>c?.t==='c',protectedCells);if(g!=null){S.board[g]=newEnemy('grandma');protectedCells.push(g)}}
+ for(let k=0;k<cfg.red;k++){let i=chooseCell((i,c)=>c?.t==='c',[]);if(i!=null)S.board[i]=newEnemy('r',{shield:cfg.special==='theory'&&k===0?1:0})}
+ for(let k=0;k<cfg.residents;k++){let i=chooseCell((i,c)=>c?.t==='c',[]);if(i!=null)S.board[i]=make('n')}
+ clearInstantMatches(); for(let n=0;n<8&&movesAvailable().length===0;n++)reshuffle(true);
+}
+function startLevel(i,newReplay=true){S.stage=i;S.map=false;if(newReplay)S.replay++;S.moves=LEVELS[i].turns;S.turn=0;S.influence=0;S.coins=0;S.score=0;S.selected=-1;S.hover=-1;S.drag=null;S.animation=null;S.previous=null;S.busy=false;S.win=false;S.loss=false;S.comboCount=0;rerollBoard();showScene('game');updateHud();message('Собери три одинаковых цвета. Убери все Слухи и Источники.');let previously=localStorageSafe('get','vbros_011_tut_'+i);if(!previously){showTutorial(i);localStorageSafe('set','vbros_011_tut_'+i,'1')}requestDraw()}
+function localStorageSafe(op,key,val){try{return op==='get'?localStorage.getItem(key):localStorage.setItem(key,val)}catch(e){return null}}
+function showScene(scene){$('sceneMap').classList.toggle('active',scene==='map');$('sceneGame').classList.toggle('active',scene==='game');S.map=scene==='map';$('mapBtn').textContent=scene==='map'?'▦ Районы':'← К карте';if(scene==='map')drawMap();window.scrollTo(0,0);requestDraw()}
+function drawMap(){let list=$('districtList');list.innerHTML=LEVELS.map((l,i)=>`<button class="district" data-stage="${i}"><span class="n">${i+1}</span><span style="flex:1"><strong>${l.name}</strong><small>${l.title} · правдоподобие: ${l.cred.toLowerCase()}</small></span><span class="chip">${l.difficulty}</span></button>`).join('');
+ $('mapHotspots').innerHTML=LEVELS.map((l,i)=>`<g class="map-pin" data-mapstage="${i}" transform="translate(${l.at[0]},${l.at[1]})" role="button" aria-label="${l.name}"><circle r="22" fill="#f9f6ed" stroke="#be6e5d" stroke-width="2"/><circle r="15" fill="#d46658"/><text fill="white" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="900">${i+1}</text></g>`).join('');
+}
+function showTutorial(stage){let [title,body]=TUTORIALS[stage];showModal('НОВАЯ МЕХАНИКА · '+LEVELS[stage].name,title,`<p>${body}</p><div class="example"><div style="display:flex;gap:5px"><i class="swatch" style="--c:#548fb0;width:24px;height:24px"></i><i class="swatch" style="--c:#61a484;width:24px;height:24px"></i><i class="swatch" style="--c:#cca14d;width:24px;height:24px"></i></div><div><b>Цвет не равен персонажу</b><br/><small>Смысл появляется после получения усиления.</small></div></div>`,'Начать игру')}
+let modalAction=null;
+function showModal(label,title,body,button='Продолжить',action=null){$('modalLabel').textContent=label;$('modalTitle').textContent=title;$('modalBody').innerHTML=body;$('modalOk').textContent=button;modalAction=action;$('modal').classList.add('visible')}
+function closeModal(){$('modal').classList.remove('visible');let a=modalAction;modalAction=null;if(a)a();requestDraw()}
+function activeThreats(){return S.board.map((c,i)=>threat(c)?i:-1).filter(i=>i>=0)}
+function updateHud(){const l=LEVELS[S.stage];$('levelKicker').textContent=`СТАМБУЛ · ИНЦИДЕНТ ${String(S.stage+1).padStart(2,'0')}`;$('levelName').textContent=l.name;$('headline').textContent=l.title;$('levelKind').textContent=l.label;$('countThreat').textContent=activeThreats().length;$('countMoves').textContent=S.moves;$('countResidents').textContent=S.board.filter(c=>c?.t==='n').length;$('countInfluence').textContent=S.influence;$('coinNote').textContent=`Победа: +${4+Math.floor(S.influence/100)} монет`;
+ const pending=S.warnings.length;$('hazard').classList.toggle('safe',pending===0);$('hazard').textContent=pending?`⚠ На следующем ходу может заразиться ${pending} объект${pending===1?'':'а'}. Красные контуры показывают цели.`:S.freeze>0?`⚖ Закон: распространение остановлено ещё на ${S.freeze} хода`:'Пока нет предупреждений о новом заражении';
+ $('undoBtn').disabled=!S.previous||S.busy;$('hintBtn').disabled=S.busy;$('lawBtn').style.display=l.special==='law'?'':'none';$('lawBtn').disabled=S.influence<60||S.busy;$('turnNote').textContent=`Ход ${S.turn} · групп слухов ${groupRumors().length}`;
+}
+function message(t,bad=false){$('status').textContent=t;$('status').classList.toggle('bad',bad)}
+function addInfluence(pts){S.influence+=pts;S.score+=pts}
+function saveUndo(){S.previous=JSON.parse(JSON.stringify({board:S.board,moves:S.moves,turn:S.turn,influence:S.influence,score:S.score,seed:S.seed,warnings:S.warnings,guard:S.guard,freeze:S.freeze,stun:S.stun,uid:S.uid,comboCount:S.comboCount}))}
+function undo(){if(S.busy||!S.previous)return;Object.assign(S,JSON.parse(JSON.stringify(S.previous)));S.previous=null;S.win=false;S.loss=false;S.selected=-1;updateHud();message('Последний ход отменён.');requestDraw()}
+function getPower(c){return c?.t==='p'?POWERS[c.p]:null}
+function immune(c){return c?.t==='p'&&!['g4','y4'].includes(c.p)}
+function guardActive(i){return Object.keys(S.guard).some(key=>S.guard[key]>0&&man(+key,i)<=1)}
+function makeDefender(i){S.guard[i]=3;S.board[i]=newColor();S.board[i].guardian=true}
+function damage(i,amount=1,instant=false){let c=S.board[i];if(!threat(c))return{hurt:0,killed:false,shield:false};if(!instant&&c.shield>0){c.shield--;return{hurt:0,killed:false,shield:true}} if(instant)c.hp=0;else c.hp-=amount;
+ if(c.hp<=0){const t=c.t;makeDefender(i);addInfluence(5);if(t==='boss'){
+  for(let n of activeThreats())if(man(i,n)<=2&&n!==i&&S.board[n]?.t!=='boss')damage(n,1);
+ }
+ return{hurt:amount,killed:true,shield:false}}
+ return{hurt:amount,killed:false,shield:false}}
+function applyMatchDamage(groups){let attacked=new Set();for(let g of groups){let near=new Set();for(let cell of g.indices)for(let k of adj(cell))if(threat(S.board[k]))near.add(k);if(near.size){for(let k of near)attacked.add(k)}else{ // An ordinary 3-match must not feel wasted: a nearby rumor within two cells is weakened.
+ let target=activeThreats().map(i=>({i,d:Math.min(...g.indices.map(j=>man(i,j)))})).filter(z=>z.d<=2).sort((a,b)=>a.d-b.d)[0];if(target)attacked.add(target.i)
+ }}let hit=0,cleared=0,shields=0;for(let i of attacked){let d=damage(i,1);if(d.hurt)hit++;if(d.killed)cleared++;if(d.shield)shields++}return{hit,cleared,shields}}
+function groupBoost(g){if(g.size<4)return null;return g.col+(g.size>=5?5:4)}
+function chooseAnchor(g,preferred){let i=preferred.find(k=>g.cells.has(k));return i!=null?i:g.indices[Math.floor(g.indices.length/2)]}
+function gravity(){const born=[];for(let x=0;x<8;x++){let y=7;while(y>=0){let idx=ind(x,y);if(!playable(x,y)||S.board[idx]?.t==='n'||threat(S.board[idx])){y--;continue}let end=y;while(y>=0&&playable(x,y)&&S.board[ind(x,y)]?.t!=='n'&&!threat(S.board[ind(x,y)]))y--;let begin=y+1;let retained=[];for(let k=end;k>=begin;k--){let c=S.board[ind(x,k)];if(c)retained.push(c)}let z=end;for(let c of retained)S.board[ind(x,z--)]=c;for(;z>=begin;z--){S.board[ind(x,z)]=newColor();born.push(ind(x,z))}}}return born}
+async function settle(preferred=[]){let chain=0,damageTotal=0,created=[],bonus=0;for(let repeat=0;repeat<24;repeat++){
+ const matches=findMatches();if(!matches.length)break;chain++;let dmg=applyMatchDamage(matches);damageTotal+=dmg.hit;
+ let used=new Set();const powerPlacement=[];for(let g of matches){let p=groupBoost(g);if(p){const spot=chooseAnchor(g,preferred);if(!used.has(spot)){powerPlacement.push([spot,p]);used.add(spot);created.push(p)}}}
+ let indices=new Set(matches.flatMap(g=>g.indices));for(let i of indices){if(S.board[i]?.t==='c')S.board[i]=null}
+ for(let [i,p] of powerPlacement)S.board[i]=make('p',{p,born:S.turn});
+ const influence=matches.reduce((a,g)=>a+(g.size>=5?40:g.size===4?25:10)+(repeat?8*(repeat+1):0),0);addInfluence(influence);bonus+=influence;
+ requestDraw();await delay(110);gravity();requestDraw();await delay(110);preferred=[];
+ }S.comboCount=chain;return{chain,damageTotal,created,bonus}}
+const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function chooseWarnings(){if(S.freeze>0)return[];let cfg=LEVELS[S.stage],cap=cfg.cap,targets=[],picked=new Set();if(S.stage===0 && S.turn%4!==0)return[];if(S.stage===1 && S.turn%3!==0)return[];if(S.stage===2 && S.turn%2!==0)return[];if(S.stage>=3 && S.turn<=6 && S.turn%2!==0)return[];let groups=groupRumors().sort((a,b)=>b.length-a.length);
+ for(let g of groups){if(targets.length>=cap)break;let strength=g.length>=5?3:g.length>=3?2:1;let cand=[];
+  for(let i=0;i<64;i++){let c=S.board[i];if(!vulnerable(c)||picked.has(c.id)||guardActive(i))continue;let dist=Math.min(...g.map(j=>man(i,j)));let exceptional=g.some(j=>S.board[j]?.t==='elite'&&S.board[j].role==='media');if(dist<=1||(dist<=2&&(g.length>=4||exceptional)))cand.push({i,dist,origin:g[0]})}
+  cand.sort((a,b)=>a.dist-b.dist||rand()-.5);for(let z of cand.slice(0,Math.min(strength,cap-targets.length))){let c=S.board[z.i],origin=S.board[z.origin];if(!c||!origin)continue;targets.push({i:z.i,targetId:c.id,fromId:origin.id,from:z.origin,kind:'near'});picked.add(c.id)}
+ }
+ // Source and remote Fake warn distant civilians rather than silently replacing arbitrary colors.
+ for(let i=0;i<64&&targets.length<cap;i++){let c=S.board[i];if(!c||!['boss','fake'].includes(c.t))continue;if(S.stun[c.id]>0)continue;
+  let canRemote=c.t==='fake'||cfg.special==='fake'||S.stage>=3;
+  let cand=[];for(let j=0;j<64;j++){let target=S.board[j];if(!vulnerable(target)||picked.has(target.id)||guardActive(j))continue;if(canRemote||man(i,j)<=2)cand.push(j)}
+  if(cand.length){let j=choose(cand),target=S.board[j];targets.push({i:j,targetId:target.id,fromId:c.id,from:i,kind:canRemote&&man(i,j)>2?'remote':'near'});picked.add(target.id)}
+ }
+ if(S.board.some(c=>c?.t==='grandma')&&targets.length<cap){let i=S.board.findIndex(c=>c?.t==='grandma');let adjC=adj(i).filter(j=>vulnerable(S.board[j])&&!picked.has(S.board[j].id)&&!guardActive(j));if(adjC.length){let j=choose(adjC);targets.push({i:j,targetId:S.board[j].id,fromId:S.board[i].id,from:i,kind:'grandma'})}}
+ return targets;
+}
+function applyWarnings(){if(S.freeze>0){S.warnings=[];return{infected:0,saved:0}}let infected=0,saved=0;
+ // A broken rumor network loses its previous propagation capacity. Recalculate
+ // quotas from the CURRENT board, not the group size when warnings appeared.
+ const groupOf={},groupQuota={},groupSpent={};
+ groupRumors().forEach((g,id)=>{let capacity=g.length>=5?3:g.length>=3?2:1;groupQuota[id]=capacity;g.forEach(i=>groupOf[i]=id)});
+ for(let w of S.warnings){let c=S.board[w.i],origin=S.board[w.from];if(!c||c.id!==w.targetId||!origin||origin.id!==w.fromId||!threat(origin))continue;if(!vulnerable(c))continue;if(guardActive(w.i)){saved++;continue}
+ if(w.kind==='near'){
+  let group=groupOf[w.from];if(group===undefined)continue;
+  let spent=groupSpent[group]||0;if(spent>=groupQuota[group])continue;groupSpent[group]=spent+1;
+ }
+ if(c.t==='n')S.board[w.i]=newEnemy('r');else if(c.p==='g4')S.board[w.i]=newEnemy('elite',{role:'leader',hp:4,max:4});else if(c.p==='y4')S.board[w.i]=newEnemy('elite',{role:'media',hp:5,max:5});infected++
+ }
+ S.warnings=[];return{infected,saved}}
+function advanceGuards(){for(let k of Object.keys(S.guard)){S.guard[k]--;if(S.guard[k]<=0)delete S.guard[k]}for(let k of Object.keys(S.stun)){S.stun[k]--;if(S.stun[k]<=0)delete S.stun[k]}}
+function reshuffle(noMsg=false){let spots=[],vals=[];for(let i=0;i<64;i++)if(canMatch(S.board[i])){spots.push(i);vals.push(S.board[i].col)};for(let attempts=0;attempts<100;attempts++){shuffle(vals);spots.forEach((i,j)=>S.board[i].col=vals[j]);if(findMatches().length===0&&movesAvailable().length)return true} // Fallback recolors, preserving rumors and boosts.
+ for(let attempts=0;attempts<100;attempts++){for(let i of spots)S.board[i].col=choose(['b','g','y']);if(findMatches().length===0&&movesAvailable().length)return true}if(!noMsg)message('На поле пока нет доступных комбинаций. Используй усиление или начни уровень заново.',true);return false}
+async function afterTurn(result){const infection=applyWarnings();advanceGuards();if(S.freeze>0)S.freeze--;if(activeThreats().length===0){victory();return}
+ S.warnings=chooseWarnings();if(S.moves<=0){defeat();return}if(!movesAvailable().length){reshuffle();}
+ S.busy=false;updateHud();const msg=infection.infected?`Слух захватил ${infection.infected} новую цель! ${result}`:infection.saved?`Защитники спасли ${infection.saved} цель. ${result}`:result;message(msg,Boolean(infection.infected));requestDraw();
+}
+function victory(){S.win=true;S.busy=false;let reward=4+Math.floor(S.influence/100);S.coins=reward;updateHud();showModal('РАЙОН ОЧИЩЕН','Слух остановлен!',`<p><b>${LEVELS[S.stage].truth}</b></p><p>Набрано Влияния: <b>${S.influence}</b>. Награда: <b>${reward} монет</b>. Монеты выдаются только за победу.</p>`,'К карте',()=>showScene('map'));requestDraw()}
+function defeat(){S.loss=true;S.busy=false;updateHud();showModal('ПОПЫТКА ЗАВЕРШЕНА','Слух распространился',`<p>Закончились ходы. Осталось активных угроз: <b>${activeThreats().length}</b>.</p><p>Это экспериментальная сложность. В новом повторе расположение цветных фишек будет другим.</p>`,'Повторить',()=>startLevel(S.stage));requestDraw()}
+function shouldAct(){return !S.busy&&!S.win&&!S.loss&&!S.map&&$('modal').classList.contains('visible')===false}
+async function performSwap(a,b){if(!shouldAct()||man(a,b)!==1)return false;let A=S.board[a],B=S.board[b];if(A?.t==='p'&&B?.t==='p')return performMix(a,b);if(A?.t==='p'&&B?.t==='c'){saveUndo();S.busy=true;swap(a,b);S.moves--;S.turn++;S.selected=-1;await animate('swap',a,b,true,140);await afterTurn('Усиление перемещено. Готовь микс.');return true}if(A?.t==='c'&&B?.t==='p'){saveUndo();S.busy=true;swap(a,b);S.moves--;S.turn++;S.selected=-1;await animate('swap',a,b,true,140);await afterTurn('Усиление перемещено. Готовь микс.');return true}
+ if(!canMatch(A)||!canMatch(B)||A.col===B.col||!isLegal(a,b)){await animate('swap',a,b,false,180);message('Нет подходящего совпадения: фишки вернулись, ход не списан.');return false}
+ saveUndo();S.busy=true;S.moves--;S.turn++;S.selected=-1;await animate('swap',a,b,true,135);swap(a,b);let report=await settle([b,a]);await afterTurn(`+${report.bonus} влияния.${report.damageTotal?` Повреждено слухов: ${report.damageTotal}.`:''}${report.created.length?` Усиление: ${report.created.map(x=>POWERS[x].name).join(', ')}.`:''}${report.chain>1?` Каскад ×${report.chain}.`:''}`);return true
+}
+async function animate(type,a,b,success,duration=160){return new Promise(resolve=>{S.animation={type,a,b,success,duration,started:performance.now(),done:resolve};requestDraw()})}
+function finishAnimation(){if(S.animation){let r=S.animation.done;S.animation=null;requestDraw();r()}}
+function selectPower(i){S.selected=i;message(`${POWERS[S.board[i].p].name}: коснись Слуха или второго усиления для супермикса.`);requestDraw()}
+function powerTargets(k,target){const type=POWERS[k],res=[];if(type.tier===4){res.push(target);if(k==='y4'){let second=activeThreats().filter(i=>i!==target&&man(i,target)<=1)[0];if(second!=null)res.push(second)}return res}
+ if(k==='b5'){res.push(target);for(let i of activeThreats())if(i!==target&&(xy(i)[0]===xy(target)[0]||xy(i)[1]===xy(target)[1]))res.push(i)}
+ if(k==='y5'){res.push(target);for(let i of activeThreats())if(i!==target&&man(i,target)<=2)res.push(i)}
+ if(k==='g5'){res.push(target);let guards=Object.keys(S.guard).filter(i=>S.guard[i]>0).map(Number);for(let i of activeThreats())if(i!==target&&(guards.some(g=>man(g,i)<=2)||(!guards.length&&man(target,i)<=2)))res.push(i)}
+ return[...new Set(res)]}
+async function performPower(origin,target){if(!shouldAct()||S.board[origin]?.t!=='p'||!threat(S.board[target]))return false;let code=S.board[origin].p,info=POWERS[code];saveUndo();S.busy=true;S.moves--;S.turn++;S.selected=-1;let targets=powerTargets(code,target),killed=0,hurt=0;
+ S.board[origin]=null;for(let i of targets){if(!threat(S.board[i]))continue;let before=S.board[i],instant=info.tier===5&&i===target;let r=damage(i,1,instant);if(r.killed)killed++;if(r.hurt)hurt++}
+ if(code==='g4')for(let i=0;i<64;i++)if(man(i,target)<=1&&validIndex(i))S.guard[i]=Math.max(2,S.guard[i]||0);
+ if(code==='b4'){let e=S.board[target];if(threat(e))S.stun[e.id]=2}
+ addInfluence(info.tier===5?55:25);requestDraw();await delay(135);gravity();let report=await settle([],false);await afterTurn(`${info.name}: снято угроз ${killed}, повреждений ${hurt}. +${info.tier===5?55:25} влияния.`);return true
+}
+async function performMix(a,b){if(!shouldAct()||a===b||S.board[a]?.t!=='p'||S.board[b]?.t!=='p')return false;if(man(a,b)!==1){message('Для супермикса усиления должны стоять рядом. Сдвинь их соседним свайпом.');return false}let kinds=[S.board[a].p,S.board[b].p],codes=kinds.slice().sort().join('+');saveUndo();S.busy=true;S.moves--;S.turn++;S.selected=-1;S.board[a]=null;S.board[b]=null;
+ let all=activeThreats(),isBroadcast=kinds.includes('y5'),isDossier=kinds.includes('b5'),hasGreen=kinds.some(k=>k.startsWith('g')),killed=0,damaged=0;
+ if(isBroadcast&&isDossier){for(let i of all){let r=damage(i,3);if(r.killed)killed++;if(r.hurt)damaged++}let remainder=activeThreats();if(remainder.length){damage(remainder[0],1,true);killed++}S.warnings=[]}
+ else {let max=Math.min(all.length,kinds.some(k=>k.endsWith('5'))?8:5);let priority=all.sort((u,v)=>(S.board[v]?.hp||0)-(S.board[u]?.hp||0));for(let i of priority.slice(0,max)){let r=damage(i,kinds.some(k=>k.endsWith('5'))?2:1);if(r.killed)killed++;if(r.hurt)damaged++}}
+ if(hasGreen)for(let i=0;i<64;i++)if(S.board[i]?.t==='n')S.guard[i]=2;
+ addInfluence(90);requestDraw();await delay(220);gravity();let report=await settle([],false);let name=isBroadcast&&isDossier?'ОБЩЕГОРОДСКОЕ ОПРОВЕРЖЕНИЕ':hasGreen?'МАССОВОЕ ПЕРЕУБЕЖДЕНИЕ':'УСИЛЕННЫЙ ИНФОУДАР';await afterTurn(`${name}: урон по ${damaged} угрозам, устранено ${killed}.`);return true
+}
+function useLaw(){if(!shouldAct()||LEVELS[S.stage].special!=='law'||S.influence<60)return;saveUndo();S.influence-=60;S.freeze=2;S.warnings=[];updateHud();message('⚖ Закон: распространение заморожено на два следующих успешных хода.');requestDraw()}
+function hint(){if(!shouldAct())return;let p=S.board.findIndex(c=>c?.t==='p');if(p>=0){S.selected=p;message('Подсказка: выделено усиление. Выбери красную цель.');requestDraw();return}let choices=movesAvailable();if(!choices.length){reshuffle();requestDraw();return}let chosen=choices[0];S.selected=chosen[0];S.hover=chosen[1];message('Подсказка: сделай свайп между подсвеченными цветными фишками.');requestDraw()}
+function lab(mode){if(S.busy||S.map)return;S.warnings=[];let options=[];for(let i=0;i<64;i++)if(S.board[i]?.t==='c')options.push(i);
+ if(mode==='pair'){
+  let i=options.find(i=>adj(i).some(j=>S.board[j]?.t==='c'));if(i!=null){let j=adj(i).find(j=>S.board[j]?.t==='c');S.board[i]=make('p',{p:'b5',born:-1});S.board[j]=make('p',{p:'y5',born:-1});message('🧪 Досье + Прямой эфир: проведи одним усилением к другому или коснись обоих.');}
+ }else if(mode==='leader'||mode==='media'){
+   let target=options.find(i=>adj(i).some(j=>threat(S.board[j])));if(target==null)target=options[0];if(target!=null){let pow=make('p',{p:mode==='leader'?'g4':'y4',born:-1});S.board[target]=pow;let from=activeThreats()[0];S.warnings=[{i:target,targetId:pow.id,from,fromId:S.board[from].id,kind:'remote'}];message(`🧪 ${mode==='leader'?'Лидер мнений':'СМИ'} под угрозой. Примени его сейчас либо сделай любой другой ход для проверки заражения.`)}
+ }else if(mode==='group'){
+   let center=options.find(i=>[i,i+1,i+8,i+9].every(j=>validIndex(j)&&S.board[j]?.t==='c'));if(center!=null){for(let j of [center,center+1,center+8,center+9])S.board[j]=newEnemy('r');message('🧪 Создана группа из четырёх Слухов: «Сеть».');}
+ }else if(mode.startsWith('power:')){let code=mode.split(':')[1];if(POWERS[code]&&options.length){S.board[options[0]]=make('p',{p:code,born:-1});message(`🧪 Создано усиление «${POWERS[code].name}». Коснись его, затем красной цели.`)}}else if(mode==='special'){
+   let cells=options.slice(0,3);if(cells.length>=3){S.board[cells[0]]=newEnemy('r',{shield:1});S.board[cells[1]]=newEnemy('fake');S.board[cells[2]]=newEnemy('grandma');message('🧪 Добавлены Теория (фиолетовая защита), Фейк и Бабушки.');}
+ }updateHud();requestDraw()
+}
+// Pure Canvas rendering keeps the board stable while the finger moves.
+function setupCanvas(){let dpr=Math.max(1,Math.min(3,window.devicePixelRatio||1));$('board').width=CANVAS_SIZE*dpr;$('board').height=CANVAS_SIZE*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+const cellSize=()=> (CANVAS_SIZE-2*PAD-7*GAP)/8;
+function rectOf(i){let [x,y]=xy(i),s=cellSize();return{x:PAD+x*(s+GAP),y:PAD+y*(s+GAP),w:s,h:s}}
+function centerOf(i){let p=rectOf(i);return{x:p.x+p.w/2,y:p.y+p.h/2}}
+function roundRect(x,y,w,h,r){ctx.beginPath();r=Math.min(r,w/2,h/2);if(typeof ctx.roundRect==='function'){ctx.roundRect(x,y,w,h,r)}else{ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y)}}
+function drawCell(i,c,x,y,flags={}){
+ let sz=cellSize(),r=7;ctx.save();ctx.shadowColor='#22352c22';ctx.shadowBlur=1;ctx.shadowOffsetY=1;
+ if(c?.t==='c'){
+  let [light,dark]=COLORS[c.col],grad=ctx.createLinearGradient(x,y,x+sz*.75,y+sz);grad.addColorStop(0,light);grad.addColorStop(1,dark);ctx.fillStyle=grad;
+ }else if(c?.t==='p'){
+  let p=POWERS[c.p],base=COLORS[p.col];let grad=ctx.createLinearGradient(x,y,x+sz,y+sz);grad.addColorStop(0,p.tier===5?'#284d4d':base[1]);grad.addColorStop(1,p.tier===5?'#263a44':base[0]);ctx.fillStyle=grad;
+ }else if(c?.t==='n')ctx.fillStyle='#c7d1cd';
+ else if(threat(c)){let grad=ctx.createLinearGradient(x,y,x+sz,y+sz);grad.addColorStop(0,c.t==='boss'?'#5e5656':'#e88f7b');grad.addColorStop(1,c.t==='boss'?'#30323a':'#be534d');ctx.fillStyle=grad}
+ else ctx.fillStyle='#dfe2da';
+ roundRect(x,y,sz,sz,r);ctx.fill();ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+ ctx.strokeStyle=c?.t==='p'?(POWERS[c.p].tier===5?'#f2d17d':'#fff0b5'):c?.t==='boss'?'#dbc17f':'#ffffff8f';ctx.lineWidth=c?.t==='p'?2.3:1;ctx.stroke();
+ ctx.fillStyle='#ffffff1e';roundRect(x+2,y+2,sz-4,Math.max(4,sz*.19),3);ctx.fill();
+ const cx=x+sz/2,cy=y+sz/2;
+ if(c?.t==='p'){
+  let p=POWERS[c.p],isStrong=p.tier===5;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fefbf2';ctx.font=`${isStrong?'900':'850'} ${c.p==='y5'?13:c.p==='g5'?20:26}px system-ui`;
+  ctx.fillText(p.mark,cx,cy+(c.p==='y5'?1:0)); if(isStrong){ctx.fillStyle='#ecc778';ctx.beginPath();ctx.arc(x+sz-8,y+9,3,0,7);ctx.fill()}
+ } else if(c?.t==='n'){
+  ctx.strokeStyle='#5f7770';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(cx,cy-6,5.8,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(cx,cy+16,10,Math.PI,Math.PI*2);ctx.stroke();
+ } else if(threat(c)){
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fff9f1';ctx.font='bold 22px system-ui';
+  if(c.t==='boss')ctx.fillText('✦',cx,cy-5);
+  else if(c.t==='grandma')ctx.fillText('☕',cx,cy-5);
+  else if(c.t==='fake')ctx.fillText('⚡',cx,cy-5);
+  else if(c.t==='elite')ctx.fillText(c.role==='leader'?'♟':'◖',cx,cy-5);
+  else {ctx.lineWidth=2;ctx.strokeStyle='#fff6ea';roundRect(cx-12,cy-15,24,20,5);ctx.stroke();ctx.beginPath();ctx.moveTo(cx-3,cy+5);ctx.lineTo(cx-7,cy+10);ctx.lineTo(cx+2,cy+5);ctx.stroke();ctx.fillText('!',cx,cy-5)}
+  // HP appears on the tile itself instead of requiring a separate legend.
+  ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffffff';ctx.fillText(`${c.hp}/${c.max}`,cx,y+sz-8);
+  if(c.t==='r'&&c.hp<c.max){ctx.strokeStyle='#ffe1c5a8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x+9,y+9);ctx.lineTo(x+15,y+14);ctx.lineTo(x+12,y+23);ctx.lineTo(x+21,y+27);ctx.stroke()}
+  if(c.shield){ctx.fillStyle='#8f6ba4';roundRect(x+2,y+1,19,17,5);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('T',x+11.5,y+10)}
+  if(c.t==='elite'){ctx.strokeStyle='#ecc77e';ctx.lineWidth=2;roundRect(x+2,y+2,sz-4,sz-4,5);ctx.stroke()}
+ }
+ if(S.guard[i]>0){ctx.strokeStyle='#38866be6';ctx.lineWidth=3;roundRect(x+2.5,y+2.5,sz-5,sz-5,5);ctx.stroke();ctx.fillStyle='#285e49';roundRect(x+sz-20,y+2,17,14,4);ctx.fill();ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#eaffef';ctx.font='bold 11px system-ui';ctx.fillText('✓',x+sz-11.5,y+9)}
+ if(S.selected===i){ctx.strokeStyle='#f3e599';ctx.lineWidth=3;roundRect(x+1.5,y+1.5,sz-3,sz-3,7);ctx.stroke()}
+ if(S.hover===i){ctx.strokeStyle='#fff9a9';ctx.lineWidth=3;ctx.setLineDash([5,3]);roundRect(x+3,y+3,sz-6,sz-6,5);ctx.stroke();ctx.setLineDash([])}
+ if(S.warnings.some(w=>w.i===i&&S.board[i]?.id===w.targetId)){
+  ctx.strokeStyle='#e53834';ctx.lineWidth=3.8;roundRect(x+2,y+2,sz-4,sz-4,6);ctx.stroke();ctx.fillStyle='#bb2e2b';roundRect(x+sz-17,y+2,15,15,4);ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold 12px system-ui';ctx.fillText('!',x+sz-9.5,y+9.5)
+ }
+ ctx.restore()
+}
+function drawBoard(now=performance.now()){
+ ctx.clearRect(0,0,CANVAS_SIZE,CANVAS_SIZE);ctx.fillStyle='#d4ddd2';roundRect(1,1,CANVAS_SIZE-2,CANVAS_SIZE-2,11);ctx.fill();let sz=cellSize();
+ for(let i=0;i<64;i++){if(!validIndex(i))continue;let{x,y}=rectOf(i);ctx.fillStyle=(xy(i)[0]+xy(i)[1])%2?'#becbc1':'#c9d5c9';roundRect(x,y,sz,sz,7);ctx.fill()}
+ // Remote warnings show which source is threatening a distant object.
+ for(let w of S.warnings){if(w.kind!=='remote'||!S.board[w.i]||S.board[w.i]?.id!==w.targetId)continue;const a=centerOf(w.from),b=centerOf(w.i);ctx.save();ctx.strokeStyle='#cf524b9e';ctx.setLineDash([3,5]);ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore()}
+ let skip=new Set(),animation=S.animation;
+ if(animation){skip.add(animation.a);skip.add(animation.b)}
+ let d=S.drag;if(d?.active&&S.board[d.i])skip.add(d.i);
+ for(let i=0;i<64;i++)if(validIndex(i)&&!skip.has(i)&&S.board[i]){let{x,y}=rectOf(i);drawCell(i,S.board[i],x,y)}
+ // Red chains progressively gain spreading strength: visually mark group sizes.
+ for(let group of groupRumors())if(group.length>=2){let anchor=Math.min(...group);if(skip.has(anchor))continue;let {x,y}=rectOf(anchor);ctx.save();ctx.fillStyle='#873832';roundRect(x+sz-17,y+1,17,15,4);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(group.length),x+sz-8.5,y+8.2);ctx.restore()}
+ if(d?.active&&S.board[d.i]){
+  let{x,y}=rectOf(d.i),length=Math.hypot(d.dx,d.dy)||1,max=sz*.8,mag=Math.min(max,length),dx=d.dx/length*mag,dy=d.dy/length*mag;
+  ctx.save();ctx.globalAlpha=.98;drawCell(d.i,S.board[d.i],x+dx,y+dy);ctx.restore()
+ }
+ if(animation){let elapsed=now-animation.started,t=Math.min(1,elapsed/animation.duration),frac=animation.success?1-Math.pow(1-t,3):Math.sin(t*Math.PI)*.45;let a=animation.a,b=animation.b;let pa=rectOf(a),pb=rectOf(b);let dx=pb.x-pa.x,dy=pb.y-pa.y;
+   if(S.board[a])drawCell(a,S.board[a],pa.x+dx*frac,pa.y+dy*frac);
+   if(S.board[b])drawCell(b,S.board[b],pb.x-dx*frac,pb.y-dy*frac);
+   if(t>=1){requestAnimationFrame(finishAnimation)}else{requestDraw()}
  }
 }
-function presets(){const l=level(),fixed=[];const set=(x,y,t)=>{if(!valid(x,y))return;let i=index(x,y);if(ENEMIES.has(board[i])||board[i]==='N')return;board[i]=t;fixed.push(i)};
- if(l.preset==='facts'){
-  set(1,2,'F');set(2,2,'F');set(3,2,'L');set(4,2,'F');set(3,1,'F');
- }if(l.preset==='leaders'){
-  set(5,1,'L');set(6,1,'L');set(5,2,'L');set(6,2,'F');set(7,2,'L');
- }if(l.preset==='media'){
-  set(1,1,'M');set(2,1,'M');set(3,1,'F');set(4,1,'M');set(5,1,'M');set(3,2,'M');
+function requestDraw(){if(renderPending)return;renderPending=true;raf=requestAnimationFrame(now=>{renderPending=false;drawBoard(now)})}
+function tileAtPointer(ev){let rect=$('board').getBoundingClientRect(),x=(ev.clientX-rect.left)*CANVAS_SIZE/rect.width,y=(ev.clientY-rect.top)*CANVAS_SIZE/rect.height,s=cellSize();let bx=Math.floor((x-PAD)/(s+GAP)),by=Math.floor((y-PAD)/(s+GAP));return playable(bx,by)?ind(bx,by):-1}
+const POINT_THRESHOLD=10;
+let gesture=null;
+function pointerDown(ev){if(!shouldAct())return;let i=tileAtPointer(ev);if(i<0)return;gesture={id:ev.pointerId,i,x:ev.clientX,y:ev.clientY,dx:0,dy:0};S.drag=null;try{ev.currentTarget.setPointerCapture(ev.pointerId)}catch(_){}ev.preventDefault()}
+function pointerMove(ev){if(!gesture||gesture.id!==ev.pointerId)return;gesture.dx=ev.clientX-gesture.x;gesture.dy=ev.clientY-gesture.y;let c=S.board[gesture.i];if(!c||!['c','p'].includes(c.t))return;let distance=Math.hypot(gesture.dx,gesture.dy);if(distance>=POINT_THRESHOLD){S.drag={i:gesture.i,dx:gesture.dx,dy:gesture.dy,active:true};requestDraw()}}
+async function pointerUp(ev){if(!gesture||gesture.id!==ev.pointerId)return;let st=gesture;gesture=null;let dx=ev.clientX-st.x,dy=ev.clientY-st.y,distance=Math.hypot(dx,dy),a=st.i,target=tileAtPointer(ev);S.drag=null;requestDraw();if(!shouldAct())return;
+ if(distance>=POINT_THRESHOLD){let c=S.board[a],b=-1;let [x,y]=xy(a);if(Math.abs(dx)>Math.abs(dy))x+=dx>0?1:-1;else y+=dy>0?1:-1;if(playable(x,y))b=ind(x,y);
+   if(c?.t==='p'&&target>=0&&threat(S.board[target])){await performPower(a,target);return}
+   if(c?.t==='p'&&target>=0&&S.board[target]?.t==='p'&&target!==a){await performMix(a,target);return}
+   if(b>=0&&(c?.t==='c'||c?.t==='p')){await performSwap(a,b);return}
+   message('Этот сдвиг недоступен. Ход не потрачен.');return
  }
- // Remove accidental initial matches while preserving the instructional pattern.
- for(let tries=0;tries<100;tries++){
- let m=findMatches();if(!m.all.size)break;let bad=Array.from(m.all).filter(i=>!fixed.includes(i)&&TYPES.has(board[i]));if(!bad.length)break;
- let i=choose(bad),other=['F','L','M'].filter(t=>t!==board[i]);board[i]=choose(other);
+ if(target<0)return;let c=S.board[target];if(S.selected>=0&&S.selected!==target&&S.board[S.selected]?.t==='p'){
+  let p=S.selected;S.selected=-1;if(threat(c)){await performPower(p,target);return}if(c?.t==='p'){await performMix(p,target);return}
  }
+ if(S.selected>=0&&S.selected!==target&&man(S.selected,target)===1&&canMatch(S.board[S.selected])&&canMatch(c)){let p=S.selected;S.selected=-1;await performSwap(p,target);return}
+ if(c?.t==='p'){selectPower(target);return}
+ if(canMatch(c)){S.selected=S.selected===target?-1:target;S.hover=-1;message('Сдвинь цветную фишку одним коротким свайпом.');requestDraw();return}
+ if(threat(c)){message(`${c.t==='grandma'?'Бабушки':c.t==='fake'?'Фейк':c.t==='boss'?'Источник':c.t==='elite'?c.role==='leader'?'Заражённый Лидер':'Заражённые СМИ':'Слух'}: ${c.hp}/${c.max} жизни. ${(()=>{let g=groupRumors().find(z=>z.includes(target));return g?.length>=5?'ПАНИКА':g?.length===4?'СЕТЬ':g?.length===3?'ЭХО':g?.length===2?'ШЁПОТ':''})()}.${c.shield?' Теория блокирует первое попадание.':''}`);S.selected=-1;requestDraw();return}
+ if(c?.t==='n'){message('Нейтральный Житель: может поверить слуху.');S.selected=-1;requestDraw()}
 }
-function setStage(n){session++;stage=n;seed=level().seed;hp={};residentGuard={};pending=[];score=0;turn=0;selected=-1;boost=-1;highlight=[];tipCells=[];busy=false;over=false;undo=null;spreadingPaused=false;recentBorn.clear();lastHit.clear();hintCells.clear();moves=level().moves;initialFill();presets();initialRed=totalRed();pending=chooseWarnings();$('overlay').classList.remove('visible');drawLevels();draw();say('Коротко сдвигай фишку в любую сторону. Нет совпадения — вернётся обратно без потери хода.');if(level().preset==='facts')showTip('Начни здесь: смени местами Факт и Лидера возле верхней части поля, чтобы получить Досье.',false)}
-function drawLevels(){$('levelButtons').innerHTML=LEVELS.map((l,i)=>`<button class="level ${i===stage?'on':''}" data-lvl="${i}"><b>${i+1}. ${l.district}</b><small>${l.kind} · ${l.moves} ходов</small></button>`).join('')}
-function stageMarks(){let map={};for(let g of groupR()){if(g.length<2)continue;let n=redStage(g.length),m=Math.min(...g);map[m]={s:n.name,n:g.length};}return map}
-function draw(){let l=level();$('district').textContent=l.district;$('difficulty').textContent=l.badge;$('levelTag').textContent=`СТАМБУЛ · ИНЦИДЕНТ ${String(stage+1).padStart(2,'0')}`;$('rumorHeadline').textContent=l.title;$('redCount').textContent=totalRed();$('moveCount').textContent=moves;$('neutralCount').textContent=board.filter(x=>x==='N').length;$('scoreInfo').textContent=`${score.toLocaleString('ru-RU')} ОЧКОВ`;$('turnInfo').textContent=boost>=0?'Усиление выбрано → укажи красную цель':`Ход ${turn} · свайпни соседние цветные фишки`;
- let red=totalRed(),percent=Math.round(red/Math.max(1,initialRed)*100),city=$('cityScene');city.classList.toggle('win',red===0);$('cityBar').style.width=Math.min(100,percent)+'%';$('cityMood').textContent=red===0?'ИНФОРМАЦИЯ ПОДТВЕРЖДЕНА':'СИТУАЦИЯ В РАЙОНЕ';$('cityOutcome').textContent=red===0?l.result:percent>170?'Слух быстро распространяется':'Слух набирает охват';
- $('threat').classList.toggle('safe',pending.length===0);$('threatText').textContent=pending.length?`⚠ Следующий ход: под угрозой ${pending.length} житель${pending.length===1?'':pending.length<5?'я':'ей'}`:l.spawn?'Новые заражения пока не готовятся':'Обучение: без новых заражений';
- const marks=stageMarks(),warns=new Set(pending.map(p=>p.i)),high=new Set(highlight),hint=new Set(hintCells);let s='';for(let y=0;y<l.mask.length;y++)for(let x=0;x<l.w;x++){let i=index(x,y),t=board[i];if(!valid(x,y)){s+='<div class="tile off"></div>';continue;}let cls=`tile ${t||'empty'}${i===selected?' selected':''}${warns.has(i)?' warn':''}${high.has(i)?' damage':''}${hint.has(i)?' suggest':''}${recentBorn.has(i)?' justBorn':''}${lastHit.has(i)?' flash':''}`;
- let extra=t==='B'?`<span class="hp">${hp[i]||1}</span>`:marks[i]?`<span class="badge">${marks[i].n}</span>`:'';if(t==='N'&&residentGuard[i]>0)extra='<span class="badge" style="background:#448e7b">✓</span>';
- s+=`<div class="${cls}" data-i="${i}" role="button" aria-label="${names[t]||'Пустая'}">${svg(t)}${extra}</div>`}
- $('board').innerHTML=s;$('board').style.setProperty('--width',l.w);$('hintBtn').disabled=busy||over;$('undoBtn').disabled=!undo||busy||over;resizeBoard();}
-function resizeBoard(){let w=$('boardWrap').clientWidth-14,n=level().w;let size=Math.min(45,Math.floor((w-((n-1)*3))/n));document.documentElement.style.setProperty('--size',Math.max(30,size)+'px');}
-function say(msg,bad=false){let e=$('notice');e.textContent=msg;e.classList.toggle('bad',bad)}
-function showTip(msg,bad=false){say(msg,bad)}
-function previewBoost(i,target){
- let t=board[i];if(!POWERS.has(t)||!ENEMIES.has(board[target]))return[];
- if(t==='DF')return[target];
- if(t==='DL')return allR().filter(k=>man(k,target)<=2).sort((a,b)=>man(a,target)-man(b,target)).slice(0,4);
- if(t==='DM'){
-  // A live broadcast can reach independent groups of the same rumor. Connected
-  // rumors have priority; farther groups fill any remaining slots, to six total.
-  let seen=new Set([target]),queue=[target],ordered=[];
-  while(queue.length){let k=queue.shift();ordered.push(k);for(let n of nb(k))if(ENEMIES.has(board[n])&&!seen.has(n)){seen.add(n);queue.push(n)}}
-  let rest=allR().filter(k=>!seen.has(k)).sort((a,b)=>(board[a]==='B'?0:1)-(board[b]==='B'?0:1)||man(a,target)-man(b,target));
-  return [...ordered,...rest].slice(0,6);
- }
- return[]}
-
-function clone(){return{board:board.slice(),moves,turn,hp:{...hp},pending:pending.map(p=>({...p})),residentGuard:{...residentGuard},score,seed,spreadingPaused};}
-function storeUndo(){undo=clone()}
-function restore(){if(!undo||busy)return;session++;({board,moves,turn,hp,pending,residentGuard,score,seed,spreadingPaused}=undo);undo=null;over=false;selected=-1;boost=-1;highlight=[];tipCells=[];recentBorn.clear();lastHit.clear();draw();say('Последний ход отменён.');}
-function swap(a,b){[board[a],board[b]]=[board[b],board[a]]}
-function matchForSwap(a,b){if(!TYPES.has(board[a])||!TYPES.has(board[b])||board[a]===board[b]||man(a,b)!==1)return false;swap(a,b);let ok=findMatches().all.size>0;swap(a,b);return ok}
-function legalMoves(){let out=[];for(let i=0;i<board.length;i++)if(TYPES.has(board[i]))for(let k of nb(i))if(k>i&&matchForSwap(i,k))out.push([i,k]);return out}
-function repairNoMoves(){if(legalMoves().length)return false;let positions=board.map((t,i)=>TYPES.has(t)?i:-1).filter(i=>i>=0),vals=positions.map(i=>board[i]);for(let tries=0;tries<45;tries++){
- shuffle(vals);positions.forEach((p,j)=>board[p]=vals[j]);if(findMatches().all.size===0&&legalMoves().length)return true}
- // Fallback: preserve at least one valid match by constructing a near-line of existing allied cells.
- for(let y=0;y<level().mask.length;y++)for(let x=0;x<level().w-3;x++){let c=[index(x,y),index(x+1,y),index(x+2,y),index(x+3,y)];if(c.every(k=>TYPES.has(board[k]))){board[c[0]]='F';board[c[1]]='F';board[c[2]]='L';board[c[3]]='F';if(matchForSwap(c[1],c[2])||matchForSwap(c[2],c[3]))return true;}}
- return false}
-function chooseWarnings(){if(!level().spawn||totalRed()===0)return[];let out=[],used=new Set();let groups=groupR().sort((a,b)=>b.length-a.length),threatLimit=level().cap;
- for(let g of groups){if(out.length>=threatLimit)break;let st=redStage(g.length);if(!st.n)continue;let cand=[];for(let i=0;i<board.length;i++)if(board[i]==='N'&&!used.has(i)&&!residentGuard[i]){
- let dist=Math.min(...g.map(a=>man(a,i)));if(dist<=st.radius)cand.push({i,d:dist,origin:g.find(k=>man(k,i)===dist)??g[0]});}
- cand.sort((a,b)=>a.d-b.d||rand()-.5);for(let z of cand.slice(0,Math.min(st.n,threatLimit-out.length))){out.push({i:z.i,origin:z.origin});used.add(z.i)}}
- for(let i=0;i<board.length&&out.length<threatLimit;i++)if(board[i]==='B'){
- let cand=nb(i).filter(j=>board[j]==='N'&&!used.has(j)&&!residentGuard[j]);if(cand.length){let k=choose(cand);out.push({i:k,origin:i});used.add(k)}}
- return out}
-function applyPending(){
- let changed=0,saved=0;
- // Re-evaluate the live strength of each original rumor group. Destroying one
- // rumor can cancel or reduce the next wave; this is a tactical countermeasure.
- let groups=groupR(),byMember={};groups.forEach((g,j)=>g.forEach(k=>byMember[k]=j));
- let quotas={};groups.forEach((g,j)=>quotas[j]=redStage(g.length).n);
- const bossQuota={};
- for(let z of pending){
-  if(board[z.i]!=='N')continue;
-  if(!ENEMIES.has(board[z.origin]))continue;
-  if(residentGuard[z.i]>0){saved++;continue}
-  if(board[z.origin]==='R'){
-   let g=byMember[z.origin];if(g===undefined||quotas[g]<=0)continue;quotas[g]--;
-  }else{
-   let k=z.origin;bossQuota[k]=(bossQuota[k]??1)-1;
-   if(bossQuota[k]<0)continue;
-  }
-  board[z.i]='R';changed++;
- }
- pending=[];return{changed,saved}}
-
-function tickGuards(){for(let k of Object.keys(residentGuard)){residentGuard[k]--;if(residentGuard[k]<=0)delete residentGuard[k]}}
-function hitEnemy(i,damage=1){if(!ENEMIES.has(board[i]))return{removed:0,boss:false};if(board[i]==='B'&&hp[i]>damage){hp[i]-=damage;return{removed:0,boss:true}}delete hp[i];board[i]='';return{removed:1,boss:false}}
-function blockEnemiesNextTurn(){return pending.length}
-function pickAroundMatches(cells){let threatened=new Set();for(let i of cells)for(let k of nb(i))if(board[k]==='R')threatened.add(k);if(!threatened.size)return null;return [...threatened].sort((a,b)=>man(a,Math.min(...cells))-man(b,Math.min(...cells)))[0]}
-function boostCandidate(entry,preferred){let cand=preferred.filter(i=>entry.cells.includes(i));if(cand.length)return cand[cand.length-1];let order=entry.cells.slice().sort((a,b)=>b-a);return order[0]}
-async function settle(preferred=[], allowAdjacent=true){let ticket=session,report={removed:0,booster:0,cascades:0,near:0};for(let wave=0;wave<18;wave++){
- let found=findMatches();if(!found.all.size)break;report.cascades=wave+1;
- let boostSet=[],busyBoost=new Set(),entries=found.entries.filter(e=>e.boost).sort((a,b)=>(b.boost==='DM'?3:b.boost==='DL'?2:1)-(a.boost==='DM'?3:a.boost==='DL'?2:1));
- for(let ent of entries){if(ent.cells.some(i=>busyBoost.has(i)))continue;ent.cells.forEach(i=>busyBoost.add(i));let anchor=boostCandidate(ent,preferred);boostSet.push({anchor,t:ent.boost});}
- const nearTarget=allowAdjacent&&wave===0?pickAroundMatches(found.all):null;
- found.all.forEach(i=>{lastHit.add(i)});draw();await sleep(150);if(ticket!==session)return report;
- for(let i of found.all)board[i]='';for(let b of boostSet)board[b.anchor]=b.t;
- if(nearTarget!==null){let r=hitEnemy(nearTarget);report.removed+=r.removed;report.near+=r.removed;score+=r.removed*110}
- report.booster+=boostSet.length;score+=found.all.size*25+boostSet.length*220+(wave?100:0);draw();await sleep(150);if(ticket!==session)return report;
- gravity();recentBorn.clear();draw();await sleep(180);if(ticket!==session)return report;
- lastHit.clear();preferred=[];
- }
- return report}
-function gravity(){let l=level();for(let x=0;x<l.w;x++){
- // Enemy and neutral tiles lock their positions. Every mobile segment refills from its own top.
- let y=l.mask.length-1;while(y>=0){if(!valid(x,y)||board[index(x,y)]==='R'||board[index(x,y)]==='B'||board[index(x,y)]==='N'){y--;continue}let end=y;
- while(y>=0&&valid(x,y)&&(TYPES.has(board[index(x,y)])||POWERS.has(board[index(x,y)])||board[index(x,y)]===''))y--;
- let start=y+1,kept=[];for(let z=end;z>=start;z--){let k=index(x,z);if(board[k])kept.push(board[k]);}let target=end;for(let v of kept){board[index(x,target--)]=v;}for(let z=target;z>=start;z--){let k=index(x,z);board[k]=choose(['F','L','M']);recentBorn.add(k)}
- }
- }}
-async function finishTurn(info){let ticket=session;
- if(totalRed()===0){busy=false;draw();end(true);return}
- let growth=applyPending();tickGuards();pending=chooseWarnings();
- if(totalRed()===0){busy=false;draw();end(true);return}
- if(moves<=0){busy=false;draw();end(false);return}
- let reshuffled=repairNoMoves();recentBorn.clear();lastHit.clear();selected=-1;boost=-1;highlight=[];hintCells.clear();busy=false;draw();
- if(reshuffled)say('Нет доступных совпадений: союзные фишки перемешаны бесплатно.');
- else if(growth.changed)say(`Слух добрался до ${growth.changed} жителей! ${info}`,true);
- else if(growth.saved)say(`Жители получили защиту от слуха. ${info}`);
- else if(pending.length)say(`${info} На следующем ходу под угрозой ${pending.length} житель${pending.length===1?'':'я'}.`);
- else say(info);
-}
-async function doSwap(a,b){if(busy||over)return false;if(!matchForSwap(a,b)){say('Комбинация не собралась — фишка вернулась. Ход сохранён.',true);highlight=[];draw();return false}
- storeUndo();busy=true;swap(a,b);moves--;turn++;selected=-1;boost=-1;hintCells.clear();lastHit=new Set([a,b]);draw();await sleep(170);if(!busy)return false;
- let results=await settle([a,b]);if(!busy)return false;
- let txt=results.booster?`Создано усилений: ${results.booster}.`:`Совпадение! +${score} очков.`;
- if(results.near)txt+=` Рядом опровергнуто слухов: ${results.near}.`;if(results.cascades>1)txt+=` Каскады: ${results.cascades}.`;
- await finishTurn(txt);return true}
-async function activateBoost(origin,target){if(busy||over||!POWERS.has(board[origin])||!ENEMIES.has(board[target]))return false;let targets=previewBoost(origin,target);if(!targets.length)return false;storeUndo();busy=true;boost=-1;selected=-1;highlight=targets;draw();await sleep(230);
- let kind=board[origin];board[origin]='';let count=0,soft=0;for(let i of targets){let previous=board[i],wasHp=hp[i];let power=kind==='DM'?2:1;let z=hitEnemy(i,power);count+=z.removed;if(previous==='B'&&board[i]==='B')soft++}
- if(kind==='DL'){for(let i=0;i<board.length;i++)if(board[i]==='N'&&man(i,target)<=2)residentGuard[i]=3}
- moves--;turn++;score+=count*200+soft*100+(kind==='DM'?400:kind==='DL'?240:120);draw();await sleep(190);
- gravity();recentBorn.clear();draw();await sleep(160);let res=await settle([],false);lastHit.clear();highlight=[];await finishTurn(`${names[kind]}: −${count} слухов${soft?`, ослаблен Источник: ${soft}`:''}.${res.removed?` Каскад: −${res.removed}.`:''}`);return true}
-function end(won){if(over)return;over=true;busy=false;selected=-1;boost=-1;highlight=[];draw();$('modalIcon').textContent=won?'✦':'↻';$('modalTitle').textContent=won?'Вброс остановлен!':'Слух победил в этом раунде';$('modalText').textContent=won?`${level().result}. Ты завершил инцидент, набрал ${score} очков и защитил район от распространения.`:`Красных осталось: ${totalRed()}. Попробуй прежде всего разрушать соседние красные группы, а потом накапливать мощные усиления.`;$('modalNext').textContent=won?'Следующий инцидент':'Повторить уровень';$('overlay').classList.add('visible')}
-function showHint(){if(busy||over)return;hintCells.clear();highlight=[];if(boost>=0){let reds=allR();if(reds.length){let t=reds.reduce((best,i)=>previewBoost(boost,i).length>previewBoost(boost,best).length?i:best,reds[0]);highlight=previewBoost(boost,t);say(`Усиление ${names[board[boost]]}: выбери подсвеченную красную цель.`)}}else{let avail=legalMoves();if(avail.length){let rank=pair=>{swap(...pair);let e=findMatches().entries;let s=e.reduce((a,b)=>a+(b.boost?100:1),0);swap(...pair);return s};avail.sort((a,b)=>rank(b)-rank(a));hintCells=new Set(avail[0]);say('Подсветил две клетки: поменяй их местами.')}else{repairNoMoves();say('Нет доступных ходов: поле перемешано.')}}draw();}
-function pointTile(x,y){let el=document.elementFromPoint(x,y)?.closest('.tile[data-i]');if(!el||!$('board').contains(el))return -1;return Number(el.dataset.i)}
-// Gesture model: a 12px directional movement, even within the starting cell, is a swipe.
-// Only one neighbor is attempted. Nonmatching swaps bounce back and cost zero moves.
-const SWIPE_THRESHOLD=12;
-let start=null,lastPreviewTarget=-1,gestureLocked=false;
-function swipeNeighbor(i,dx,dy){
- if(Math.max(Math.abs(dx),Math.abs(dy))<SWIPE_THRESHOLD)return -1;
- let [x,y]=coord(i);
- if(Math.abs(dx)>=Math.abs(dy))x+=dx>0?1:-1;
- else y+=dy>0?1:-1;
- return valid(x,y)?index(x,y):-1;
-}
-function gestureTile(i){return $('board').querySelector(`.tile[data-i="${i}"]`)}
-function clearGesture(){
- $('board').querySelectorAll('.gesture-src,.gesture-dst').forEach(el=>{
-  el.style.transform='';el.classList.remove('gesture-src','gesture-dst');
- });
-}
-function previewSwipe(s,dx,dy){
- const a=s.i,b=swipeNeighbor(a,dx,dy);
- if(s.neighbor!==b){clearGesture();s.neighbor=b;}
- if(!TYPES.has(board[a]))return;
- const src=gestureTile(a);if(!src)return;
- if(b<0||!TYPES.has(board[b])){
-  const limited=Math.min(8,Math.hypot(dx,dy)/2);
-  const h=Math.abs(dx)>=Math.abs(dy),sign=(h?dx:dy)>=0?1:-1;
-  src.classList.add('gesture-src');src.style.transform=`translate(${h?limited*sign:0}px,${h?0:limited*sign}px)`;
-  return;
- }
- const dst=gestureTile(b);if(!dst)return;
- const [ax,ay]=coord(a),[bx,by]=coord(b),step=src.getBoundingClientRect().width+3;
- const dist=Math.abs(bx-ax)?Math.abs(dx):Math.abs(dy);
- const progress=Math.max(.13,Math.min(.72,(dist-SWIPE_THRESHOLD)/(step-SWIPE_THRESHOLD)));
- src.classList.add('gesture-src');dst.classList.add('gesture-dst');
- src.style.transform=`translate(${(bx-ax)*step*progress}px,${(by-ay)*step*progress}px)`;
- dst.style.transform=`translate(${(ax-bx)*step*progress}px,${(ay-by)*step*progress}px)`;
-}
-function slideAnimation(el, x, y, success, opposite=false){
- if(!el||typeof el.animate!=='function')return Promise.resolve();
- const p0='translate(0px,0px)',p1=`translate(${x}px,${y}px)`;
- const frames=success?[{transform:p0},{transform:p1}]:[{transform:p0},{transform:`translate(${x*.62}px,${y*.62}px)`,offset:.42},{transform:p0}];
- const anim=el.animate(frames,{duration:success?125:200,easing:success?'cubic-bezier(.25,.9,.25,1)':'cubic-bezier(.33,0,.25,1)'});
- return anim.finished.catch(()=>{});
-}
-async function trySwipe(a,b){
- if(gestureLocked||busy||over)return;
- gestureLocked=true;
- const src=gestureTile(a),dst=b>=0?gestureTile(b):null;
- const [ax,ay]=coord(a);
- const [bx,by]=b>=0?coord(b):[ax,ay];
- const cell=(parseFloat(getComputedStyle($('board')).getPropertyValue('--size'))||39)+3;
- const tx=b>=0?(bx-ax)*cell:0,ty=b>=0?(by-ay)*cell:0;
- const adjacent=b>=0&&man(a,b)===1;
- const swappable=adjacent&&TYPES.has(board[a])&&TYPES.has(board[b]);
- const match=swappable&&matchForSwap(a,b);
- if(swappable){
-  await Promise.all([slideAnimation(src,tx,ty,match),slideAnimation(dst,-tx,-ty,match)]);
- }else{
-  await slideAnimation(src,tx||9,ty, false);
- }
- gestureLocked=false;
- if(match){void doSwap(a,b);return}
- say(swappable?'Нет совпадения — фишки вернулись, ход сохранён.':'Сюда нельзя сдвинуть фишку. Ход сохранён.');
-}
-function onStart(e){
- if(busy||over||gestureLocked||start)return;
- let tile=e.target.closest('.tile[data-i]');if(!tile)return;
- let i=Number(tile.dataset.i);
- start={i,x:e.clientX,y:e.clientY,id:e.pointerId,dragged:false,neighbor:-1};
- lastPreviewTarget=-1;
- try{$('board').setPointerCapture(e.pointerId)}catch(_){}
- if(e.pointerType==='touch')e.preventDefault();
-}
-function onMove(e){
- if(!start||start.id!==e.pointerId||busy)return;
- let dx=e.clientX-start.x,dy=e.clientY-start.y;
- if(Math.max(Math.abs(dx),Math.abs(dy))>=SWIPE_THRESHOLD)start.dragged=true;
- const origin=start.i;
- if(TYPES.has(board[origin])){
-  if(start.dragged)previewSwipe(start,dx,dy);
-  return;
- }
- const power=POWERS.has(board[origin])?origin:boost;
- if(power<0)return;
- let target=pointTile(e.clientX,e.clientY);
- if(lastPreviewTarget===target)return;
- lastPreviewTarget=target;
- highlight=target>=0&&ENEMIES.has(board[target])?previewBoost(power,target):[];
- draw();
-}
-function onEnd(e){
- if(!start||start.id!==e.pointerId)return;
- const st=start;start=null;
- let dx=e.clientX-st.x,dy=e.clientY-st.y;
- const moved=st.dragged||Math.max(Math.abs(dx),Math.abs(dy))>=SWIPE_THRESHOLD;
- clearGesture();
- let a=st.i;
- if(TYPES.has(board[a])&&moved){
-  const b=swipeNeighbor(a,dx,dy);
-  selected=-1;boost=-1;hintCells.clear();
-  void trySwipe(a,b);
-  return;
- }
- let b=pointTile(e.clientX,e.clientY);
- if(POWERS.has(board[a])&&moved){
-   if(b>=0&&ENEMIES.has(board[b])){void activateBoost(a,b);return}
-   if(b>=0&&POWERS.has(board[b])){boost=b;highlight=[];draw();return}
-   boost=a;highlight=[];say('Перенеси усиление на красного или коснись красной цели.');draw();return;
- }
- if(b<0)return;
- if(boost>=0){
-  if(ENEMIES.has(board[b])){void activateBoost(boost,b);return}
-  if(POWERS.has(board[b])){boost=b;highlight=[];draw();return}
-  if(b===boost){boost=-1;highlight=[];draw();return}
-  say('Выбери красную цель для усиления.');return;
- }
- if(POWERS.has(board[b])){boost=b;selected=-1;highlight=[];say(`${names[board[b]]}: теперь нажми или перетащи на выбранный Слух.`);draw();return}
- // Tap-to-tap remains an accessibility fallback; touch gesture is the primary move.
- if(selected>=0&&selected!==b&&man(selected,b)===1&&TYPES.has(board[selected])&&TYPES.has(board[b])){
-  let from=selected;selected=-1;void trySwipe(from,b);return;
- }
- if(TYPES.has(board[b])){
-  selected=selected===b?-1:b;boost=-1;hintCells.clear();draw();
-  say('Сдвинь фишку коротким свайпом вверх, вниз, влево или вправо.');return;
- }
- if(ENEMIES.has(board[b])){
-  let g=groupR().find(s=>s.includes(b));let groupText=g?redStage(g.length).name:'одиночный';
-  say(board[b]==='B'?`Источник: осталось воздействий ${hp[b]||1}.`:`Слух · группа: ${groupText.toLowerCase()}.`);selected=-1;draw();return;
- }
- if(board[b]==='N'){say('Житель пока не распространяет слух. ⚠ означает угрозу заражения на следующий ход.');selected=-1;draw()}
-}
-$('board').addEventListener('pointerdown',onStart,{passive:false});
-$('board').addEventListener('pointermove',onMove,{passive:false});
-$('board').addEventListener('pointerup',onEnd);
-$('board').addEventListener('pointercancel',()=>{start=null;clearGesture();highlight=[];draw()});
-$('board').addEventListener('lostpointercapture',()=>{if(start){start=null;clearGesture()}});
-$('board').addEventListener('contextmenu',e=>e.preventDefault());
-$('levelButtons').addEventListener('click',e=>{let b=e.target.closest('[data-lvl]');if(b)setStage(Number(b.dataset.lvl))});$('hintBtn').addEventListener('click',showHint);$('undoBtn').addEventListener('click',restore);$('resetBtn').addEventListener('click',()=>setStage(stage));$('modalReplay').addEventListener('click',()=>setStage(stage));$('modalNext').addEventListener('click',()=>{let n=(stage+1)%LEVELS.length;setStage($('modalTitle').textContent==='Вброс остановлен!'?n:stage);});$('helpTop').addEventListener('click',()=>say('Короткий свайп в любом направлении; без совпадения фишка вернётся. 3 в линию — очистка. 4 Факта — Досье. 4 Лидера квадратом — Эффект. 5 СМИ — Прямой эфир. Выбери усиление и красную цель.'));
-window.addEventListener('resize',resizeBoard);window.addEventListener('orientationchange',()=>setTimeout(resizeBoard,100));
-// Diagnostics: useful for automated consistency checks, not part of the game UI.
-window.__vbros={state:()=>({stage,board:board.slice(),moves,turn,pending:pending.map(o=>({...o})),hp:{...hp},score,over,seed}),findMatches,legalMoves,doSwap,activateBoost,setStage,groupR,previewBoost,repairNoMoves};
-setStage(0);
-</script>
-</body></html>
+$('board').addEventListener('pointerdown',pointerDown,{passive:false});$('board').addEventListener('pointermove',pointerMove,{passive:false});$('board').addEventListener('pointerup',pointerUp,{passive:false});$('board').addEventListener('pointercancel',()=>{gesture=null;S.drag=null;requestDraw()});$('board').addEventListener('contextmenu',e=>e.preventDefault());
+$('mapBtn').addEventListener('click',()=>showScene(S.map?'game':'map'));
+$('helpBtn').addEventListener('click',()=>{if(S.map)showModal('КРАТКИЕ ПРАВИЛА','Свайпай и останавливай слухи',`<p>Открой район. Обычные цветные фишки дают Влияние и наносят урон соседним слухам. Четыре цвета — базовое усиление, пять — мощное. Красные растут и заражают Жителей. Факты не заражаются.</p>`);else showTutorial(S.stage)});
+$('districtList').addEventListener('click',e=>{let b=e.target.closest('[data-stage]');if(b)startLevel(+b.dataset.stage)});
+$('mapHotspots').addEventListener('click',e=>{let pin=e.target.closest('[data-mapstage]');if(pin)startLevel(+pin.dataset.mapstage)});
+$('modalOk').addEventListener('click',closeModal);
+$('hintBtn').addEventListener('click',hint);$('undoBtn').addEventListener('click',undo);$('resetBtn').addEventListener('click',()=>startLevel(S.stage));$('lawBtn').addEventListener('click',useLaw);
+document.querySelectorAll('[data-test]').forEach(b=>b.addEventListener('click',()=>lab(b.dataset.test)));
+window.addEventListener('resize',()=>{setupCanvas();requestDraw()});
+// Testable deterministic API for automated regression of repeated levels and edge cases.
+window.__VBROS={state:()=>({stage:S.stage,map:S.map,board:JSON.parse(JSON.stringify(S.board)),moves:S.moves,turn:S.turn,influence:S.influence,score:S.score,warnings:JSON.parse(JSON.stringify(S.warnings)),guard:{...S.guard},activeThreats:activeThreats().length,win:S.win,loss:S.loss,seed:S.seed,comboCount:S.comboCount}),levels:LEVELS.map(l=>l.name),enter:startLevel,swap:performSwap,activate:performPower,mix:performMix,lab,undo,findMatches,movesAvailable,reroll:()=>startLevel(S.stage),dismiss:closeModal};
+setupCanvas();drawMap();showScene('map');requestDraw();
+</script></body></html>
